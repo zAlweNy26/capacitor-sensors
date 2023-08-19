@@ -14,29 +14,29 @@ class SensorInstance(
     val type: SensorType,
     private val delay: SensorDelay = SensorDelay.NORMAL
 ) : SensorEventListener {
-    private var sensor = sensorsMap[type]?.let { manager.getDefaultSensor(it) }
+    private var sensor = manager.getDefaultSensor(type.type)
 
     fun init(): JSObject {
         val infos = JSObject()
-        infos.put("vendor", sensor?.vendor)
-        infos.put("version", sensor?.version)
-        infos.put("type", sensor?.type)
-        infos.put("maxRange", sensor?.maximumRange)
-        infos.put("resolution", sensor?.resolution)
-        infos.put("power", sensor?.power)
-        infos.put("minDelay", sensor?.minDelay)
-        infos.put("maxDelay", sensor?.maxDelay)
+        infos.put("vendor", sensor.vendor)
+        infos.put("version", sensor.version)
+        infos.put("type", sensor.type)
+        infos.put("maxRange", sensor.maximumRange)
+        infos.put("resolution", sensor.resolution)
+        infos.put("power", sensor.power)
+        infos.put("minDelay", sensor.minDelay)
+        infos.put("maxDelay", sensor.maxDelay)
 
         val ret = JSObject()
         ret.put("infos", infos)
-        ret.put("type", this.type)
-        ret.put("delay", this.delay)
+        ret.put("type", this.type.ordinal)
+        ret.put("delay", this.delay.ordinal)
         return ret
     }
 
     fun start() {
         if (this.sensor != null) {
-            this.manager.registerListener(this, this.sensor, this.delay.toInt())
+            this.manager.registerListener(this, this.sensor, this.delay.ordinal)
             Log.d("Start", "Sensor: " + this.type.toString())
         }
     }

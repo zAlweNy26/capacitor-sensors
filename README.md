@@ -23,6 +23,7 @@ npx cap sync
 * [`requestPermissions(...)`](#requestpermissions)
 * [`start(...)`](#start)
 * [`stop(...)`](#stop)
+* [`addListener(EventType, ...)`](#addlistenereventtype)
 * [Interfaces](#interfaces)
 * [Type Aliases](#type-aliases)
 * [Enums](#enums)
@@ -99,6 +100,22 @@ stop(sensor: Sensor) => Promise<void>
 --------------------
 
 
+### addListener(EventType, ...)
+
+```typescript
+addListener(eventName: EventType, listenerFunc: (...args: any[]) => void) => Promise<PluginListenerHandle>
+```
+
+| Param              | Type                                            |
+| ------------------ | ----------------------------------------------- |
+| **`eventName`**    | <code><a href="#eventtype">EventType</a></code> |
+| **`listenerFunc`** | <code>(...args: any[]) =&gt; void</code>        |
+
+**Returns:** <code>Promise&lt;<a href="#pluginlistenerhandle">PluginListenerHandle</a>&gt;</code>
+
+--------------------
+
+
 ### Interfaces
 
 
@@ -135,10 +152,17 @@ stop(sensor: Sensor) => Promise<void>
 
 | Prop                         | Type                                                        |
 | ---------------------------- | ----------------------------------------------------------- |
-| **`'accelerometer'`**        | <code><a href="#permissionstate">PermissionState</a></code> |
+| **`accelerometer`**          | <code><a href="#permissionstate">PermissionState</a></code> |
 | **`'ambient-light-sensor'`** | <code><a href="#permissionstate">PermissionState</a></code> |
-| **`'gyroscope'`**            | <code><a href="#permissionstate">PermissionState</a></code> |
-| **`'magnetometer'`**         | <code><a href="#permissionstate">PermissionState</a></code> |
+| **`gyroscope`**              | <code><a href="#permissionstate">PermissionState</a></code> |
+| **`magnetometer`**           | <code><a href="#permissionstate">PermissionState</a></code> |
+
+
+#### PluginListenerHandle
+
+| Prop         | Type                                      |
+| ------------ | ----------------------------------------- |
+| **`remove`** | <code>() =&gt; Promise&lt;void&gt;</code> |
 
 
 ### Type Aliases
@@ -147,6 +171,11 @@ stop(sensor: Sensor) => Promise<void>
 #### PermissionState
 
 <code>'prompt' | 'prompt-with-rationale' | 'granted' | 'denied'</code>
+
+
+#### EventType
+
+<code>keyof typeof <a href="#sensortype">SensorType</a> | keyof typeof <a href="#websensortype">WebSensorType</a></code>
 
 
 ### Enums

@@ -3,7 +3,6 @@ package com.alwe.plugins.sensors
 import android.content.Context
 import android.hardware.Sensor
 import android.hardware.SensorManager
-import android.util.Log
 import com.getcapacitor.JSArray
 import com.getcapacitor.JSObject
 import com.getcapacitor.Plugin
@@ -22,7 +21,7 @@ class SensorsPlugin : Plugin() {
         val type = call.getInt("type")?.toEnum<SensorType>()!!
         val delay = call.getInt("delay", 3)?.toEnum<SensorDelay>()!!
 
-        if (!isPresent(type.toInt())) {
+        if (!isPresent(type)) {
             call.resolve()
             return
         }
@@ -32,12 +31,11 @@ class SensorsPlugin : Plugin() {
         call.resolve(this.sensors.last().init())
     }
 
-    private fun isPresent(sensor: Int): Boolean {
+    private fun isPresent(sensor: SensorType): Boolean {
         if (sensorsManager == null) {
             sensorsManager = this.context.getSystemService(Context.SENSOR_SERVICE) as SensorManager
         }
-        val realEnum = sensorsMap[sensor.toEnum()] ?: return false
-        return sensorsManager?.getDefaultSensor(realEnum) != null
+        return sensorsManager?.getDefaultSensor(sensor.type) != null
     }
 
     @PluginMethod
