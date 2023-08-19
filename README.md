@@ -5,7 +5,7 @@ Get access to every sensor present in the device!
 ## Install
 
 ```bash
-npm install @alwe/sensors
+npm install capacitor-sensors
 npx cap sync
 ```
 
