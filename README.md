@@ -13,6 +13,7 @@ npx cap sync
 
 - [ ] Add iOS support
 - [ ] Improve code readability
+- [ ] Add listener types
 
 ## API
 
@@ -23,7 +24,7 @@ npx cap sync
 * [`requestPermissions(...)`](#requestpermissions)
 * [`start(...)`](#start)
 * [`stop(...)`](#stop)
-* [`addListener(EventType, ...)`](#addlistenereventtype)
+* [`addListener(...)`](#addlistener)
 * [Interfaces](#interfaces)
 * [Type Aliases](#type-aliases)
 * [Enums](#enums)
@@ -36,14 +37,14 @@ npx cap sync
 ### init(...)
 
 ```typescript
-init(options: SensorOptions) => Promise<Sensor | undefined>
+init(options: SensorOptions) => Promise<SensorData | undefined>
 ```
 
 | Param         | Type                                                    |
 | ------------- | ------------------------------------------------------- |
 | **`options`** | <code><a href="#sensoroptions">SensorOptions</a></code> |
 
-**Returns:** <code>Promise&lt;<a href="#sensor">Sensor</a>&gt;</code>
+**Returns:** <code>Promise&lt;<a href="#sensordata">SensorData</a>&gt;</code>
 
 --------------------
 
@@ -51,10 +52,10 @@ init(options: SensorOptions) => Promise<Sensor | undefined>
 ### getAvailableSensors()
 
 ```typescript
-getAvailableSensors() => Promise<{ sensors: (SensorType | WebSensorType)[]; }>
+getAvailableSensors() => Promise<{ sensors: SensorType[]; }>
 ```
 
-**Returns:** <code>Promise&lt;{ sensors: (<a href="#sensortype">SensorType</a> | <a href="#websensortype">WebSensorType</a>)[]; }&gt;</code>
+**Returns:** <code>Promise&lt;{ sensors: SensorType[]; }&gt;</code>
 
 --------------------
 
@@ -62,14 +63,14 @@ getAvailableSensors() => Promise<{ sensors: (SensorType | WebSensorType)[]; }>
 ### requestPermissions(...)
 
 ```typescript
-requestPermissions(sensor: Sensor) => Promise<WebPermissionStatus[]>
+requestPermissions(sensor: SensorData) => Promise<WebPermissionStatus>
 ```
 
-| Param        | Type                                      |
-| ------------ | ----------------------------------------- |
-| **`sensor`** | <code><a href="#sensor">Sensor</a></code> |
+| Param        | Type                                              |
+| ------------ | ------------------------------------------------- |
+| **`sensor`** | <code><a href="#sensordata">SensorData</a></code> |
 
-**Returns:** <code>Promise&lt;WebPermissionStatus[]&gt;</code>
+**Returns:** <code>Promise&lt;<a href="#webpermissionstatus">WebPermissionStatus</a>&gt;</code>
 
 --------------------
 
@@ -77,12 +78,12 @@ requestPermissions(sensor: Sensor) => Promise<WebPermissionStatus[]>
 ### start(...)
 
 ```typescript
-start(sensor: Sensor) => Promise<void>
+start(sensor: SensorData) => Promise<void>
 ```
 
-| Param        | Type                                      |
-| ------------ | ----------------------------------------- |
-| **`sensor`** | <code><a href="#sensor">Sensor</a></code> |
+| Param        | Type                                              |
+| ------------ | ------------------------------------------------- |
+| **`sensor`** | <code><a href="#sensordata">SensorData</a></code> |
 
 --------------------
 
@@ -90,26 +91,26 @@ start(sensor: Sensor) => Promise<void>
 ### stop(...)
 
 ```typescript
-stop(sensor: Sensor) => Promise<void>
+stop(sensor: SensorData) => Promise<void>
 ```
 
-| Param        | Type                                      |
-| ------------ | ----------------------------------------- |
-| **`sensor`** | <code><a href="#sensor">Sensor</a></code> |
+| Param        | Type                                              |
+| ------------ | ------------------------------------------------- |
+| **`sensor`** | <code><a href="#sensordata">SensorData</a></code> |
 
 --------------------
 
 
-### addListener(EventType, ...)
+### addListener(...)
 
 ```typescript
-addListener(eventName: EventType, listenerFunc: (...args: any[]) => void) => Promise<PluginListenerHandle>
+addListener(eventName: SensorEvent, listenerFunc: (...args: any[]) => void) => Promise<PluginListenerHandle>
 ```
 
-| Param              | Type                                            |
-| ------------------ | ----------------------------------------------- |
-| **`eventName`**    | <code><a href="#eventtype">EventType</a></code> |
-| **`listenerFunc`** | <code>(...args: any[]) =&gt; void</code>        |
+| Param              | Type                                                |
+| ------------------ | --------------------------------------------------- |
+| **`eventName`**    | <code><a href="#sensorevent">SensorEvent</a></code> |
+| **`listenerFunc`** | <code>(...args: any[]) =&gt; void</code>            |
 
 **Returns:** <code>Promise&lt;<a href="#pluginlistenerhandle">PluginListenerHandle</a>&gt;</code>
 
@@ -119,7 +120,7 @@ addListener(eventName: EventType, listenerFunc: (...args: any[]) => void) => Pro
 ### Interfaces
 
 
-#### Sensor
+#### SensorData
 
 | Prop        | Type                                                |
 | ----------- | --------------------------------------------------- |
@@ -142,10 +143,10 @@ addListener(eventName: EventType, listenerFunc: (...args: any[]) => void) => Pro
 
 #### SensorOptions
 
-| Prop        | Type                                                                                            |
-| ----------- | ----------------------------------------------------------------------------------------------- |
-| **`type`**  | <code><a href="#sensortype">SensorType</a> \| <a href="#websensortype">WebSensorType</a></code> |
-| **`delay`** | <code><a href="#sensordelay">SensorDelay</a></code>                                             |
+| Prop        | Type                                                |
+| ----------- | --------------------------------------------------- |
+| **`type`**  | <code><a href="#sensortype">SensorType</a></code>   |
+| **`delay`** | <code><a href="#sensordelay">SensorDelay</a></code> |
 
 
 #### WebPermissionStatus
@@ -173,9 +174,9 @@ addListener(eventName: EventType, listenerFunc: (...args: any[]) => void) => Pro
 <code>'prompt' | 'prompt-with-rationale' | 'granted' | 'denied'</code>
 
 
-#### EventType
+#### SensorEvent
 
-<code>keyof typeof <a href="#sensortype">SensorType</a> | keyof typeof <a href="#websensortype">WebSensorType</a></code>
+<code>keyof typeof <a href="#sensortype">SensorType</a></code>
 
 
 ### Enums
@@ -185,7 +186,7 @@ addListener(eventName: EventType, listenerFunc: (...args: any[]) => void) => Pro
 
 | Members                           |
 | --------------------------------- |
-| **`LIGHT`**                       |
+| **`AMBIENT_LIGHT`**               |
 | **`ACCELEROMETER`**               |
 | **`TEMPERATURE`**                 |
 | **`GAME_ROTATION_VECTOR`**        |
@@ -195,7 +196,7 @@ addListener(eventName: EventType, listenerFunc: (...args: any[]) => void) => Pro
 | **`HEART_BEAT`**                  |
 | **`HEART_RATE`**                  |
 | **`LINEAR_ACCELERATION`**         |
-| **`MAGNETIC_FIELD`**              |
+| **`MAGNETOMETER`**                |
 | **`MOTION_DETECT`**               |
 | **`ORIENTATION`**                 |
 | **`POSE_6DOF`**                   |
@@ -204,23 +205,11 @@ addListener(eventName: EventType, listenerFunc: (...args: any[]) => void) => Pro
 | **`RELATIVE_HUMIDITY`**           |
 | **`ROTATION_VECTOR`**             |
 | **`SIGNIFICANT_MOTION`**          |
-| **`STATIONARY_DETECT`**           |
+| **`STATIONARY_DETECTOR`**         |
 | **`STEP_COUNTER`**                |
 | **`STEP_DETECTOR`**               |
-
-
-#### WebSensorType
-
-| Members                    |
-| -------------------------- |
-| **`ACCELEROMETER`**        |
-| **`AMBIENT_LIGHT`**        |
-| **`GYROSCOPE`**            |
-| **`MAGNETOMETER`**         |
-| **`GRAVITY`**              |
-| **`ABSOLUTE_ORIENTATION`** |
-| **`LINEAR_ACCELERATION`**  |
-| **`RELATIVE_ORIENTATION`** |
+| **`ABSOLUTE_ORIENTATION`**        |
+| **`RELATIVE_ORIENTATION`**        |
 
 
 #### SensorDelay

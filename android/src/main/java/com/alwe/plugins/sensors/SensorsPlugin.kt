@@ -26,9 +26,14 @@ class SensorsPlugin : Plugin() {
             return
         }
 
-        this.sensors.add(SensorInstance(::notifyListeners, sensorsManager!!, type, delay))
+        var newSensor = this.sensors.find { it.type == type }
 
-        call.resolve(this.sensors.last().init())
+        if (newSensor == null) {
+            newSensor = SensorInstance(::notifyListeners, sensorsManager!!, type, delay)
+            this.sensors.add(newSensor)
+        }
+
+        call.resolve(newSensor.init())
     }
 
     private fun isPresent(sensor: SensorType): Boolean {

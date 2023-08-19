@@ -1,17 +1,17 @@
 import { WebPlugin } from '@capacitor/core';
 
 import type { SensorsPlugin, SensorOptions, SensorData, WebPermissionStatus } from './definitions';
-import { SensorDelay, WebSensorType } from './definitions';
+import { SensorDelay, SensorType } from './definitions';
 
-const webSupportedSensors: Record<string, WebSensorType> = {
-  AbsoluteOrientationSensor: WebSensorType.ABSOLUTE_ORIENTATION,
-  Accelerometer: WebSensorType.ACCELEROMETER,
-  AmbientLightSensor: WebSensorType.AMBIENT_LIGHT,
-  GravitySensor: WebSensorType.GRAVITY,
-  Gyroscope: WebSensorType.GYROSCOPE,
-  LinearAccelerationSensor: WebSensorType.LINEAR_ACCELERATION,
-  Magnetometer: WebSensorType.MAGNETOMETER,
-  RelativeOrientationSensor: WebSensorType.RELATIVE_ORIENTATION,
+const webSupportedSensors: Record<string, SensorType> = {
+  AbsoluteOrientationSensor: SensorType.ABSOLUTE_ORIENTATION,
+  Accelerometer: SensorType.ACCELEROMETER,
+  AmbientLightSensor: SensorType.AMBIENT_LIGHT,
+  GravitySensor: SensorType.GRAVITY,
+  Gyroscope: SensorType.GYROSCOPE,
+  LinearAccelerationSensor: SensorType.LINEAR_ACCELERATION,
+  Magnetometer: SensorType.MAGNETOMETER,
+  RelativeOrientationSensor: SensorType.RELATIVE_ORIENTATION,
 };
 
 const webSensorFrequency: Record<SensorDelay, number> = {
@@ -21,32 +21,30 @@ const webSensorFrequency: Record<SensorDelay, number> = {
   [SensorDelay.NORMAL]: 60,
 };
 
-const webNeededPerms: Record<WebSensorType, (keyof WebPermissionStatus)[]> = {
-  [WebSensorType.ABSOLUTE_ORIENTATION]: ['accelerometer', 'gyroscope', 'magnetometer'],
-  [WebSensorType.ACCELEROMETER]: ['accelerometer'],
-  [WebSensorType.AMBIENT_LIGHT]: ['ambient-light-sensor'],
-  [WebSensorType.GRAVITY]: ['accelerometer'],
-  [WebSensorType.GYROSCOPE]: ['gyroscope'],
-  [WebSensorType.LINEAR_ACCELERATION]: ['accelerometer'],
-  [WebSensorType.MAGNETOMETER]: ['magnetometer'],
-  [WebSensorType.RELATIVE_ORIENTATION]: ['accelerometer', 'gyroscope'],
+const webNeededPerms: Record<number, (keyof WebPermissionStatus)[]> = {
+  [SensorType.ABSOLUTE_ORIENTATION]: ['accelerometer', 'gyroscope', 'magnetometer'],
+  [SensorType.ACCELEROMETER]: ['accelerometer'],
+  [SensorType.AMBIENT_LIGHT]: ['ambient-light-sensor'],
+  [SensorType.GRAVITY]: ['accelerometer'],
+  [SensorType.GYROSCOPE]: ['gyroscope'],
+  [SensorType.LINEAR_ACCELERATION]: ['accelerometer'],
+  [SensorType.MAGNETOMETER]: ['magnetometer'],
+  [SensorType.RELATIVE_ORIENTATION]: ['accelerometer', 'gyroscope'],
 };
 
-const getWindowProperty = (type: WebSensorType) =>
+const getWindowProperty = (type: SensorType) =>
   Object.keys(webSupportedSensors).find((key) => webSupportedSensors[key] === type);
 
 export class SensorWeb implements SensorData {
   private sensor!: Sensor;
 
   constructor(
-    public type: WebSensorType,
+    public type: SensorType,
     public notify: (eventName: string, data: any) => void,
     public delay: SensorDelay = SensorDelay.NORMAL,
   ) {
-    const windowKey = getWindowProperty(type);
-    if (windowKey) {
-      this.sensor = new (window as any)[windowKey]({ frequency: webSensorFrequency[delay] });
-    }
+    const windowKey = getWindowProperty(type) ?? '';
+    this.sensor = new ((window as any)[windowKey])({ frequency: webSensorFrequency[delay] });
   }
 
   start(): void {
@@ -61,7 +59,7 @@ export class SensorWeb implements SensorData {
         delete values['start'];
         delete values['stop'];
       }
-      this.notify(WebSensorType[this.type], values);
+      this.notify(SensorType[this.type], values);
     });
     this.sensor.start();
   }
@@ -73,15 +71,19 @@ export class SensorWeb implements SensorData {
 }
 
 export class SensorsWeb extends WebPlugin implements SensorsPlugin {
-  async requestPermissions(sensor: SensorData): Promise<WebPermissionStatus[]> {
+  async requestPermissions(sensor: SensorData): Promise<WebPermissionStatus> {
     if (typeof navigator === 'undefined' || !navigator.permissions) {
       this.unavailable('Permissions API not available in this browser.');
     }
-    const sensorType = sensor.type as WebSensorType;
     const permission = await Promise.all(
-      webNeededPerms[sensorType].map((p) => navigator.permissions.query({ name: p as PermissionName })),
+      webNeededPerms[sensor.type].map((p) => navigator.permissions.query({ name: p as PermissionName })),
     );
-    return permission as unknown as WebPermissionStatus[];
+    return permission.reduce((p, c) => {
+      return {
+        ...p,
+        [c.name]: c.state
+      }
+    }, {} as WebPermissionStatus)
   }
 
   async start(sensor: SensorWeb): Promise<void> {
@@ -93,15 +95,14 @@ export class SensorsWeb extends WebPlugin implements SensorsPlugin {
   }
 
   async init({ type, delay }: SensorOptions): Promise<SensorWeb | undefined> {
-    const webType = type as WebSensorType;
-    if (this.isPresent(webType)) {
-      const sensor = new SensorWeb(webType, this.notifyListeners, delay);
+    if (this.isPresent(type)) {
+      const sensor = new SensorWeb(type, this.notifyListeners, delay);
       return sensor;
     }
     return undefined;
   }
 
-  async getAvailableSensors(): Promise<{ sensors: WebSensorType[] }> {
+  async getAvailableSensors(): Promise<{ sensors: SensorType[] }> {
     const sensorsList = Object.entries(webSupportedSensors)
       .filter(([sensorName]) => sensorName in window)
       .map(([, sensorType]) => sensorType);
@@ -110,8 +111,8 @@ export class SensorsWeb extends WebPlugin implements SensorsPlugin {
     };
   }
 
-  private isPresent(type: WebSensorType) {
-    if (type in WebSensorType) {
+  private isPresent(type: SensorType) {
+    if (type in SensorType) {
       const windowKey = getWindowProperty(type);
       if (windowKey) return windowKey in window;
       return false;

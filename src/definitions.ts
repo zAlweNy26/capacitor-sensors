@@ -14,19 +14,8 @@ export enum SensorDelay {
   NORMAL, // Default rate, suitable for screen orientation changes
 }
 
-export enum WebSensorType {
-  ACCELEROMETER,
-  AMBIENT_LIGHT,
-  GYROSCOPE,
-  MAGNETOMETER,
-  GRAVITY,
-  ABSOLUTE_ORIENTATION,
-  LINEAR_ACCELERATION,
-  RELATIVE_ORIENTATION,
-}
-
 export enum SensorType {
-  LIGHT,
+  AMBIENT_LIGHT,
   ACCELEROMETER,
   TEMPERATURE,
   GAME_ROTATION_VECTOR,
@@ -36,7 +25,7 @@ export enum SensorType {
   HEART_BEAT,
   HEART_RATE,
   LINEAR_ACCELERATION,
-  MAGNETIC_FIELD,
+  MAGNETOMETER,
   MOTION_DETECT,
   ORIENTATION,
   POSE_6DOF,
@@ -45,13 +34,17 @@ export enum SensorType {
   RELATIVE_HUMIDITY,
   ROTATION_VECTOR,
   SIGNIFICANT_MOTION,
-  STATIONARY_DETECT,
+  STATIONARY_DETECTOR,
   STEP_COUNTER,
   STEP_DETECTOR,
+  ABSOLUTE_ORIENTATION,
+  RELATIVE_ORIENTATION,
 }
 
+export type SensorEvent = keyof typeof SensorType
+
 export interface SensorOptions {
-  type: SensorType | WebSensorType;
+  type: SensorType;
   delay?: SensorDelay;
 }
 
@@ -70,15 +63,13 @@ export interface SensorData extends SensorOptions {
   infos?: SensorInfos;
 }
 
-type EventType = keyof typeof SensorType | keyof typeof WebSensorType;
-
 export interface SensorsPlugin extends Omit<Plugin, 'addListener'> {
   init(options: SensorOptions): Promise<SensorData | undefined>;
   getAvailableSensors(): Promise<{
-    sensors: (SensorType | WebSensorType)[];
+    sensors: SensorType[];
   }>;
-  requestPermissions(sensor: SensorData): Promise<WebPermissionStatus[]>;
+  requestPermissions(sensor: SensorData): Promise<WebPermissionStatus>;
   start(sensor: SensorData): Promise<void>;
   stop(sensor: SensorData): Promise<void>;
-  addListener(eventName: EventType, listenerFunc: (...args: any[]) => void): Promise<PluginListenerHandle>;
+  addListener(eventName: SensorEvent, listenerFunc: (...args: any[]) => void): Promise<PluginListenerHandle>;
 }
