@@ -16,7 +16,7 @@ jobs:
           node-version: 16.x
           cache: "npm"
       - name: Fresh install
-        run: npm run ci
+        run: npm ci
       - name: Running ESLint & Prettier
         run: npm run fmt
       - name: Building
