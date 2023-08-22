@@ -1,5 +1,5 @@
 {
-  "name": "@alwe/capacitor-sensors",
+  "name": "capacitor-sensors",
   "version": "0.0.1",
   "description": "Get access to every sensor present in the device!",
   "main": "dist/plugin.cjs.js",

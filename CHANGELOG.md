@@ -1,4 +1,4 @@
-# @alwe/capacitor-sensors
+# capacitor-sensors
 
 ## 0.0.1
 
