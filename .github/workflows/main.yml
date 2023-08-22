@@ -20,7 +20,7 @@ jobs:
       - name: Running ESLint & Prettier
         run: npm run fmt
       - name: Building
-        run: npm run build
+        run: npx tsc && npx rollup -c rollup.config.js --bundleConfigAsCjs
       - uses: stefanzweifel/git-auto-commit-action@v4
         with:
           commit_message: Build package
