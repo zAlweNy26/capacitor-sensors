@@ -79,6 +79,6 @@ export interface SensorsPlugin {
   addListener(
     eventName: SensorEvent,
     listenerFunc: (event: SensorListenerResult) => void,
-  ): Promise<PluginListenerHandle> & PluginListenerHandle;
+  ): Promise<PluginListenerHandle>;
   removeAllListeners(): Promise<void>;
 }

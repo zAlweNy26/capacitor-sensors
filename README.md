@@ -9,11 +9,45 @@ npm install capacitor-sensors
 npx cap sync
 ```
 
-## Todos
+## Supported methods
 
-- [ ] Add iOS support
-- [ ] Improve code readability
-- [ ] Add listener types
+| Name                | Android | iOS | Web |
+| :------------------ | :------ | :-- | :-- |
+| init                | ✅      | ❌  | ✅  |
+| getAvailableSensors | ✅      | ❌  | ✅  |
+| requestPermissions  | ❌      | ❌  | ✅  |
+| start               | ✅      | ❌  | ✅  |
+| stop                | ✅      | ❌  | ✅  |
+| addListener         | ✅      | ❌  | ✅  |
+| removeAllListeners  | ✅      | ❌  | ✅  |
+
+## Supported sensors
+
+| Sensors                           | Android | iOS | Web |
+| :-------------------------------- | :------ | :-- | :-- |
+| **`AMBIENT_LIGHT`**               | ✅      | ❌  | ✅  |
+| **`ACCELEROMETER`**               | ✅      | ❌  | ✅  |
+| **`TEMPERATURE`**                 | ✅      | ❌  | ❌  |
+| **`GAME_ROTATION_VECTOR`**        | ✅      | ❌  | ❌  |
+| **`GEOMAGNETIC_ROTATION_VECTOR`** | ✅      | ❌  | ❌  |
+| **`GRAVITY`**                     | ✅      | ❌  | ✅  |
+| **`GYROSCOPE`**                   | ✅      | ❌  | ✅  |
+| **`HEART_BEAT`**                  | ✅      | ❌  | ❌  |
+| **`HEART_RATE`**                  | ✅      | ❌  | ❌  |
+| **`LINEAR_ACCELERATION`**         | ✅      | ❌  | ✅  |
+| **`MAGNETOMETER`**                | ✅      | ❌  | ✅  |
+| **`MOTION_DETECTOR`**             | ✅      | ❌  | ❌  |
+| **`POSE_6DOF`**                   | ✅      | ❌  | ❌  |
+| **`PRESSURE`**                    | ✅      | ❌  | ❌  |
+| **`PROXIMITY`**                   | ✅      | ❌  | ❌  |
+| **`RELATIVE_HUMIDITY`**           | ✅      | ❌  | ❌  |
+| **`ROTATION_VECTOR`**             | ✅      | ❌  | ❌  |
+| **`SIGNIFICANT_MOTION`**          | ✅      | ❌  | ❌  |
+| **`STATIONARY_DETECTOR`**         | ✅      | ❌  | ❌  |
+| **`STEP_COUNTER`**                | ✅      | ❌  | ❌  |
+| **`STEP_DETECTOR`**               | ✅      | ❌  | ❌  |
+| **`ABSOLUTE_ORIENTATION`**        | ❌      | ❌  | ✅  |
+| **`RELATIVE_ORIENTATION`**        | ❌      | ❌  | ✅  |
 
 ## API
 
@@ -24,7 +58,7 @@ npx cap sync
 * [`requestPermissions(...)`](#requestpermissions)
 * [`start(...)`](#start)
 * [`stop(...)`](#stop)
-* [`addListener('AMBIENT_LIGHT' | 'ACCELEROMETER' | 'TEMPERATURE' | 'GAME_ROTATION_VECTOR' | 'GEOMAGNETIC_ROTATION_VECTOR' | 'GRAVITY' | 'GYROSCOPE' | 'HEART_BEAT' | 'HEART_RATE' | 'LINEAR_ACCELERATION' | 'MAGNETOMETER' | 'MOTION_DETECTOR' | 'POSE_6DOF' | 'PRESSURE' | 'PROXIMITY' | 'RELATIVE_HUMIDITY' | 'ROTATION_VECTOR' | 'SIGNIFICANT_MOTION' | 'STATIONARY_DETECTOR' | 'STEP_COUNTER' | 'STEP_DETECTOR' | 'ABSOLUTE_ORIENTATION' | 'RELATIVE_ORIENTATION', ...)`](#addlistenerambient_light--accelerometer--temperature--game_rotation_vector--geomagnetic_rotation_vector--gravity--gyroscope--heart_beat--heart_rate--linear_acceleration--magnetometer--motion_detector--pose_6dof--pressure--proximity--relative_humidity--rotation_vector--significant_motion--stationary_detector--step_counter--step_detector--absolute_orientation--relative_orientation)
+* [`addListener(...)`](#addlistener)
 * [`removeAllListeners()`](#removealllisteners)
 * [Interfaces](#interfaces)
 * [Type Aliases](#type-aliases)
@@ -102,18 +136,18 @@ stop(sensor: SensorData) => Promise<void>
 --------------------
 
 
-### addListener('AMBIENT_LIGHT' | 'ACCELEROMETER' | 'TEMPERATURE' | 'GAME_ROTATION_VECTOR' | 'GEOMAGNETIC_ROTATION_VECTOR' | 'GRAVITY' | 'GYROSCOPE' | 'HEART_BEAT' | 'HEART_RATE' | 'LINEAR_ACCELERATION' | 'MAGNETOMETER' | 'MOTION_DETECTOR' | 'POSE_6DOF' | 'PRESSURE' | 'PROXIMITY' | 'RELATIVE_HUMIDITY' | 'ROTATION_VECTOR' | 'SIGNIFICANT_MOTION' | 'STATIONARY_DETECTOR' | 'STEP_COUNTER' | 'STEP_DETECTOR' | 'ABSOLUTE_ORIENTATION' | 'RELATIVE_ORIENTATION', ...)
+### addListener(...)
 
 ```typescript
-addListener(eventName: SensorEvent, listenerFunc: (event: SensorListenerResult) => void) => Promise<PluginListenerHandle> & PluginListenerHandle
+addListener(eventName: SensorEvent, listenerFunc: (event: SensorListenerResult) => void) => Promise<PluginListenerHandle>
 ```
 
 | Param              | Type                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
 | ------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **`eventName`**    | <code>'AMBIENT_LIGHT' \| 'ACCELEROMETER' \| 'TEMPERATURE' \| 'GAME_ROTATION_VECTOR' \| 'GEOMAGNETIC_ROTATION_VECTOR' \| 'GRAVITY' \| 'GYROSCOPE' \| 'HEART_BEAT' \| 'HEART_RATE' \| 'LINEAR_ACCELERATION' \| 'MAGNETOMETER' \| 'MOTION_DETECTOR' \| 'POSE_6DOF' \| 'PRESSURE' \| 'PROXIMITY' \| 'RELATIVE_HUMIDITY' \| 'ROTATION_VECTOR' \| 'SIGNIFICANT_MOTION' \| 'STATIONARY_DETECTOR' \| 'STEP_COUNTER' \| 'STEP_DETECTOR' \| 'ABSOLUTE_ORIENTATION' \| 'RELATIVE_ORIENTATION'</code> |
+| **`eventName`**    | <code><a href="#sensorevent">SensorEvent</a></code> |
 | **`listenerFunc`** | <code>(event: <a href="#sensorlistenerresult">SensorListenerResult</a>) =&gt; void</code>                                                                                                                                                                                                                                                                                                                                                                                                 |
 
-**Returns:** <code>Promise&lt;<a href="#pluginlistenerhandle">PluginListenerHandle</a>&gt; & <a href="#pluginlistenerhandle">PluginListenerHandle</a></code>
+**Returns:** <code>Promise&lt;<a href="#pluginlistenerhandle">PluginListenerHandle</a>&gt;</code>
 
 --------------------
 

@@ -68,6 +68,11 @@ class SensorsPlugin : Plugin() {
     }
 
     @PluginMethod
+    fun requestPermissions(call: PluginCall) {
+        call.unimplemented("There is no need of permissions for the sensors in Android!")
+    }
+
+    @PluginMethod
     fun stop(call: PluginCall) {
         val sensor = call.data.getInt("type").toEnum<SensorType>()!!
         this.sensors.find { it.type == sensor }?.stop()
