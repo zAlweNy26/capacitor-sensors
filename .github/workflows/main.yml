@@ -1,0 +1,27 @@
+name: CI
+on:
+  push:
+    branches:
+      - "**"
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 16.x
+          cache: "npm"
+      - name: Fresh install
+        run: npm run ci
+      - name: Running ESLint & Prettier
+        run: npm run fmt
+      - name: Building
+        run: npm run build
+      - uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          commit_message: Build package
+          commit_user_name: Builder Bot
