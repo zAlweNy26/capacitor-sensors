@@ -68,7 +68,7 @@ class SensorsPlugin : Plugin() {
     }
 
     @PluginMethod
-    fun requestPermissions(call: PluginCall) {
+    override fun requestPermissions(call: PluginCall) {
         call.unimplemented("There is no need of permissions for the sensors in Android!")
     }
 

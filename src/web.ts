@@ -57,8 +57,8 @@ export class SensorWeb implements SensorData {
       if ('z' in this.sensor) values.push(this.sensor.z as number);
 
       const result = {
-        accuracy: 0,
-        timestamp: this.sensor.timestamp ?? 0,
+        accuracy: -1,
+        timestamp: this.sensor.timestamp ?? -1,
         values,
       } satisfies SensorListenerResult;
 
