@@ -24,7 +24,8 @@ npx cap sync
 * [`requestPermissions(...)`](#requestpermissions)
 * [`start(...)`](#start)
 * [`stop(...)`](#stop)
-* [`addListener(...)`](#addlistener)
+* [`addListener('AMBIENT_LIGHT' | 'ACCELEROMETER' | 'TEMPERATURE' | 'GAME_ROTATION_VECTOR' | 'GEOMAGNETIC_ROTATION_VECTOR' | 'GRAVITY' | 'GYROSCOPE' | 'HEART_BEAT' | 'HEART_RATE' | 'LINEAR_ACCELERATION' | 'MAGNETOMETER' | 'MOTION_DETECTOR' | 'POSE_6DOF' | 'PRESSURE' | 'PROXIMITY' | 'RELATIVE_HUMIDITY' | 'ROTATION_VECTOR' | 'SIGNIFICANT_MOTION' | 'STATIONARY_DETECTOR' | 'STEP_COUNTER' | 'STEP_DETECTOR' | 'ABSOLUTE_ORIENTATION' | 'RELATIVE_ORIENTATION', ...)`](#addlistenerambient_light--accelerometer--temperature--game_rotation_vector--geomagnetic_rotation_vector--gravity--gyroscope--heart_beat--heart_rate--linear_acceleration--magnetometer--motion_detector--pose_6dof--pressure--proximity--relative_humidity--rotation_vector--significant_motion--stationary_detector--step_counter--step_detector--absolute_orientation--relative_orientation)
+* [`removeAllListeners()`](#removealllisteners)
 * [Interfaces](#interfaces)
 * [Type Aliases](#type-aliases)
 * [Enums](#enums)
@@ -101,18 +102,27 @@ stop(sensor: SensorData) => Promise<void>
 --------------------
 
 
-### addListener(...)
+### addListener('AMBIENT_LIGHT' | 'ACCELEROMETER' | 'TEMPERATURE' | 'GAME_ROTATION_VECTOR' | 'GEOMAGNETIC_ROTATION_VECTOR' | 'GRAVITY' | 'GYROSCOPE' | 'HEART_BEAT' | 'HEART_RATE' | 'LINEAR_ACCELERATION' | 'MAGNETOMETER' | 'MOTION_DETECTOR' | 'POSE_6DOF' | 'PRESSURE' | 'PROXIMITY' | 'RELATIVE_HUMIDITY' | 'ROTATION_VECTOR' | 'SIGNIFICANT_MOTION' | 'STATIONARY_DETECTOR' | 'STEP_COUNTER' | 'STEP_DETECTOR' | 'ABSOLUTE_ORIENTATION' | 'RELATIVE_ORIENTATION', ...)
 
 ```typescript
-addListener(eventName: SensorEvent, listenerFunc: (...args: any[]) => void) => Promise<PluginListenerHandle>
+addListener(eventName: SensorEvent, listenerFunc: (event: SensorListenerResult) => void) => Promise<PluginListenerHandle> & PluginListenerHandle
 ```
 
-| Param              | Type                                                |
-| ------------------ | --------------------------------------------------- |
-| **`eventName`**    | <code><a href="#sensorevent">SensorEvent</a></code> |
-| **`listenerFunc`** | <code>(...args: any[]) =&gt; void</code>            |
+| Param              | Type                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
+| ------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **`eventName`**    | <code>'AMBIENT_LIGHT' \| 'ACCELEROMETER' \| 'TEMPERATURE' \| 'GAME_ROTATION_VECTOR' \| 'GEOMAGNETIC_ROTATION_VECTOR' \| 'GRAVITY' \| 'GYROSCOPE' \| 'HEART_BEAT' \| 'HEART_RATE' \| 'LINEAR_ACCELERATION' \| 'MAGNETOMETER' \| 'MOTION_DETECTOR' \| 'POSE_6DOF' \| 'PRESSURE' \| 'PROXIMITY' \| 'RELATIVE_HUMIDITY' \| 'ROTATION_VECTOR' \| 'SIGNIFICANT_MOTION' \| 'STATIONARY_DETECTOR' \| 'STEP_COUNTER' \| 'STEP_DETECTOR' \| 'ABSOLUTE_ORIENTATION' \| 'RELATIVE_ORIENTATION'</code> |
+| **`listenerFunc`** | <code>(event: <a href="#sensorlistenerresult">SensorListenerResult</a>) =&gt; void</code>                                                                                                                                                                                                                                                                                                                                                                                                 |
 
-**Returns:** <code>Promise&lt;<a href="#pluginlistenerhandle">PluginListenerHandle</a>&gt;</code>
+**Returns:** <code>Promise&lt;<a href="#pluginlistenerhandle">PluginListenerHandle</a>&gt; & <a href="#pluginlistenerhandle">PluginListenerHandle</a></code>
+
+--------------------
+
+
+### removeAllListeners()
+
+```typescript
+removeAllListeners() => Promise<void>
+```
 
 --------------------
 
@@ -166,6 +176,15 @@ addListener(eventName: SensorEvent, listenerFunc: (...args: any[]) => void) => P
 | **`remove`** | <code>() =&gt; Promise&lt;void&gt;</code> |
 
 
+#### SensorListenerResult
+
+| Prop            | Type                  |
+| --------------- | --------------------- |
+| **`accuracy`**  | <code>number</code>   |
+| **`timestamp`** | <code>number</code>   |
+| **`values`**    | <code>number[]</code> |
+
+
 ### Type Aliases
 
 
@@ -197,8 +216,7 @@ addListener(eventName: SensorEvent, listenerFunc: (...args: any[]) => void) => P
 | **`HEART_RATE`**                  |
 | **`LINEAR_ACCELERATION`**         |
 | **`MAGNETOMETER`**                |
-| **`MOTION_DETECT`**               |
-| **`ORIENTATION`**                 |
+| **`MOTION_DETECTOR`**             |
 | **`POSE_6DOF`**                   |
 | **`PRESSURE`**                    |
 | **`PROXIMITY`**                   |

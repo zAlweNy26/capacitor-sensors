@@ -34,21 +34,28 @@ export class SensorWeb {
         this.notify = notify;
         this.delay = delay;
         const windowKey = (_a = getWindowProperty(type)) !== null && _a !== void 0 ? _a : '';
-        this.sensor = new (window[windowKey])({ frequency: webSensorFrequency[delay] });
+        this.sensor = new window[windowKey]({ frequency: webSensorFrequency[delay] });
     }
     start() {
         this.sensor.addEventListener('reading', () => {
-            const values = JSON.parse(JSON.stringify(this.sensor));
-            if (values) {
-                delete values['activated'];
-                delete values['hasReading'];
-                delete values['onactivate'];
-                delete values['onreading'];
-                delete values['onerror'];
-                delete values['start'];
-                delete values['stop'];
-            }
-            this.notify(SensorType[this.type], values);
+            var _a;
+            const values = [];
+            if ('illuminance' in this.sensor)
+                values.push(this.sensor.illuminance);
+            if ('quaternion' in this.sensor)
+                values.push(...this.sensor.quaternion);
+            if ('x' in this.sensor)
+                values.push(this.sensor.x);
+            if ('y' in this.sensor)
+                values.push(this.sensor.y);
+            if ('z' in this.sensor)
+                values.push(this.sensor.z);
+            const result = {
+                accuracy: 0,
+                timestamp: (_a = this.sensor.timestamp) !== null && _a !== void 0 ? _a : 0,
+                values,
+            };
+            this.notify(SensorType[this.type], result);
         });
         this.sensor.start();
     }

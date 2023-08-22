@@ -1,4 +1,4 @@
-import type { PermissionState, Plugin, PluginListenerHandle } from '@capacitor/core';
+import type { PermissionState, PluginListenerHandle } from '@capacitor/core';
 
 export interface WebPermissionStatus {
   accelerometer: PermissionState;
@@ -26,8 +26,7 @@ export enum SensorType {
   HEART_RATE,
   LINEAR_ACCELERATION,
   MAGNETOMETER,
-  MOTION_DETECT,
-  ORIENTATION,
+  MOTION_DETECTOR,
   POSE_6DOF,
   PRESSURE,
   PROXIMITY,
@@ -41,7 +40,7 @@ export enum SensorType {
   RELATIVE_ORIENTATION,
 }
 
-export type SensorEvent = keyof typeof SensorType
+export type SensorEvent = keyof typeof SensorType;
 
 export interface SensorOptions {
   type: SensorType;
@@ -63,7 +62,13 @@ export interface SensorData extends SensorOptions {
   infos?: SensorInfos;
 }
 
-export interface SensorsPlugin extends Omit<Plugin, 'addListener'> {
+export interface SensorListenerResult {
+  accuracy: number;
+  timestamp: number;
+  values: number[];
+}
+
+export interface SensorsPlugin {
   init(options: SensorOptions): Promise<SensorData | undefined>;
   getAvailableSensors(): Promise<{
     sensors: SensorType[];
@@ -71,5 +76,9 @@ export interface SensorsPlugin extends Omit<Plugin, 'addListener'> {
   requestPermissions(sensor: SensorData): Promise<WebPermissionStatus>;
   start(sensor: SensorData): Promise<void>;
   stop(sensor: SensorData): Promise<void>;
-  addListener(eventName: SensorEvent, listenerFunc: (...args: any[]) => void): Promise<PluginListenerHandle>;
+  addListener(
+    eventName: SensorEvent,
+    listenerFunc: (event: SensorListenerResult) => void,
+  ): Promise<PluginListenerHandle> & PluginListenerHandle;
+  removeAllListeners(): Promise<void>;
 }

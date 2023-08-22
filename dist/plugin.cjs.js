@@ -22,19 +22,18 @@ exports.SensorType = void 0;
     SensorType[SensorType["HEART_RATE"] = 8] = "HEART_RATE";
     SensorType[SensorType["LINEAR_ACCELERATION"] = 9] = "LINEAR_ACCELERATION";
     SensorType[SensorType["MAGNETOMETER"] = 10] = "MAGNETOMETER";
-    SensorType[SensorType["MOTION_DETECT"] = 11] = "MOTION_DETECT";
-    SensorType[SensorType["ORIENTATION"] = 12] = "ORIENTATION";
-    SensorType[SensorType["POSE_6DOF"] = 13] = "POSE_6DOF";
-    SensorType[SensorType["PRESSURE"] = 14] = "PRESSURE";
-    SensorType[SensorType["PROXIMITY"] = 15] = "PROXIMITY";
-    SensorType[SensorType["RELATIVE_HUMIDITY"] = 16] = "RELATIVE_HUMIDITY";
-    SensorType[SensorType["ROTATION_VECTOR"] = 17] = "ROTATION_VECTOR";
-    SensorType[SensorType["SIGNIFICANT_MOTION"] = 18] = "SIGNIFICANT_MOTION";
-    SensorType[SensorType["STATIONARY_DETECTOR"] = 19] = "STATIONARY_DETECTOR";
-    SensorType[SensorType["STEP_COUNTER"] = 20] = "STEP_COUNTER";
-    SensorType[SensorType["STEP_DETECTOR"] = 21] = "STEP_DETECTOR";
-    SensorType[SensorType["ABSOLUTE_ORIENTATION"] = 22] = "ABSOLUTE_ORIENTATION";
-    SensorType[SensorType["RELATIVE_ORIENTATION"] = 23] = "RELATIVE_ORIENTATION";
+    SensorType[SensorType["MOTION_DETECTOR"] = 11] = "MOTION_DETECTOR";
+    SensorType[SensorType["POSE_6DOF"] = 12] = "POSE_6DOF";
+    SensorType[SensorType["PRESSURE"] = 13] = "PRESSURE";
+    SensorType[SensorType["PROXIMITY"] = 14] = "PROXIMITY";
+    SensorType[SensorType["RELATIVE_HUMIDITY"] = 15] = "RELATIVE_HUMIDITY";
+    SensorType[SensorType["ROTATION_VECTOR"] = 16] = "ROTATION_VECTOR";
+    SensorType[SensorType["SIGNIFICANT_MOTION"] = 17] = "SIGNIFICANT_MOTION";
+    SensorType[SensorType["STATIONARY_DETECTOR"] = 18] = "STATIONARY_DETECTOR";
+    SensorType[SensorType["STEP_COUNTER"] = 19] = "STEP_COUNTER";
+    SensorType[SensorType["STEP_DETECTOR"] = 20] = "STEP_DETECTOR";
+    SensorType[SensorType["ABSOLUTE_ORIENTATION"] = 21] = "ABSOLUTE_ORIENTATION";
+    SensorType[SensorType["RELATIVE_ORIENTATION"] = 22] = "RELATIVE_ORIENTATION";
 })(exports.SensorType || (exports.SensorType = {}));
 
 const Sensors = core.registerPlugin('Sensors', {
@@ -75,21 +74,28 @@ class SensorWeb {
         this.notify = notify;
         this.delay = delay;
         const windowKey = (_a = getWindowProperty(type)) !== null && _a !== void 0 ? _a : '';
-        this.sensor = new (window[windowKey])({ frequency: webSensorFrequency[delay] });
+        this.sensor = new window[windowKey]({ frequency: webSensorFrequency[delay] });
     }
     start() {
         this.sensor.addEventListener('reading', () => {
-            const values = JSON.parse(JSON.stringify(this.sensor));
-            if (values) {
-                delete values['activated'];
-                delete values['hasReading'];
-                delete values['onactivate'];
-                delete values['onreading'];
-                delete values['onerror'];
-                delete values['start'];
-                delete values['stop'];
-            }
-            this.notify(exports.SensorType[this.type], values);
+            var _a;
+            const values = [];
+            if ('illuminance' in this.sensor)
+                values.push(this.sensor.illuminance);
+            if ('quaternion' in this.sensor)
+                values.push(...this.sensor.quaternion);
+            if ('x' in this.sensor)
+                values.push(this.sensor.x);
+            if ('y' in this.sensor)
+                values.push(this.sensor.y);
+            if ('z' in this.sensor)
+                values.push(this.sensor.z);
+            const result = {
+                accuracy: 0,
+                timestamp: (_a = this.sensor.timestamp) !== null && _a !== void 0 ? _a : 0,
+                values,
+            };
+            this.notify(exports.SensorType[this.type], result);
         });
         this.sensor.start();
     }

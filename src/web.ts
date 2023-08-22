@@ -1,7 +1,7 @@
 import { WebPlugin } from '@capacitor/core';
 
 import type { SensorsPlugin, SensorOptions, SensorData, WebPermissionStatus } from './definitions';
-import { SensorDelay, SensorType } from './definitions';
+import { SensorDelay, SensorType, SensorListenerResult } from './definitions';
 
 const webSupportedSensors: Record<string, SensorType> = {
   AbsoluteOrientationSensor: SensorType.ABSOLUTE_ORIENTATION,
@@ -44,22 +44,25 @@ export class SensorWeb implements SensorData {
     public delay: SensorDelay = SensorDelay.NORMAL,
   ) {
     const windowKey = getWindowProperty(type) ?? '';
-    this.sensor = new ((window as any)[windowKey])({ frequency: webSensorFrequency[delay] });
+    this.sensor = new (window as any)[windowKey]({ frequency: webSensorFrequency[delay] });
   }
 
   start(): void {
     this.sensor.addEventListener('reading', () => {
-      const values = JSON.parse(JSON.stringify(this.sensor));
-      if (values) {
-        delete values['activated'];
-        delete values['hasReading'];
-        delete values['onactivate'];
-        delete values['onreading'];
-        delete values['onerror'];
-        delete values['start'];
-        delete values['stop'];
-      }
-      this.notify(SensorType[this.type], values);
+      const values: number[] = [];
+      if ('illuminance' in this.sensor) values.push(this.sensor.illuminance as number);
+      if ('quaternion' in this.sensor) values.push(...(this.sensor.quaternion as number[]));
+      if ('x' in this.sensor) values.push(this.sensor.x as number);
+      if ('y' in this.sensor) values.push(this.sensor.y as number);
+      if ('z' in this.sensor) values.push(this.sensor.z as number);
+
+      const result = {
+        accuracy: 0,
+        timestamp: this.sensor.timestamp ?? 0,
+        values,
+      } satisfies SensorListenerResult;
+
+      this.notify(SensorType[this.type], result);
     });
     this.sensor.start();
   }
@@ -81,9 +84,9 @@ export class SensorsWeb extends WebPlugin implements SensorsPlugin {
     return permission.reduce((p, c) => {
       return {
         ...p,
-        [c.name]: c.state
-      }
-    }, {} as WebPermissionStatus)
+        [c.name]: c.state,
+      };
+    }, {} as WebPermissionStatus);
   }
 
   async start(sensor: SensorWeb): Promise<void> {

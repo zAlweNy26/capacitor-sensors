@@ -1,4 +1,4 @@
-import type { PermissionState, Plugin, PluginListenerHandle } from '@capacitor/core';
+import type { PermissionState, PluginListenerHandle } from '@capacitor/core';
 export interface WebPermissionStatus {
     accelerometer: PermissionState;
     'ambient-light-sensor': PermissionState;
@@ -23,19 +23,18 @@ export declare enum SensorType {
     HEART_RATE = 8,
     LINEAR_ACCELERATION = 9,
     MAGNETOMETER = 10,
-    MOTION_DETECT = 11,
-    ORIENTATION = 12,
-    POSE_6DOF = 13,
-    PRESSURE = 14,
-    PROXIMITY = 15,
-    RELATIVE_HUMIDITY = 16,
-    ROTATION_VECTOR = 17,
-    SIGNIFICANT_MOTION = 18,
-    STATIONARY_DETECTOR = 19,
-    STEP_COUNTER = 20,
-    STEP_DETECTOR = 21,
-    ABSOLUTE_ORIENTATION = 22,
-    RELATIVE_ORIENTATION = 23
+    MOTION_DETECTOR = 11,
+    POSE_6DOF = 12,
+    PRESSURE = 13,
+    PROXIMITY = 14,
+    RELATIVE_HUMIDITY = 15,
+    ROTATION_VECTOR = 16,
+    SIGNIFICANT_MOTION = 17,
+    STATIONARY_DETECTOR = 18,
+    STEP_COUNTER = 19,
+    STEP_DETECTOR = 20,
+    ABSOLUTE_ORIENTATION = 21,
+    RELATIVE_ORIENTATION = 22
 }
 export type SensorEvent = keyof typeof SensorType;
 export interface SensorOptions {
@@ -55,7 +54,12 @@ export interface SensorInfos {
 export interface SensorData extends SensorOptions {
     infos?: SensorInfos;
 }
-export interface SensorsPlugin extends Omit<Plugin, 'addListener'> {
+export interface SensorListenerResult {
+    accuracy: number;
+    timestamp: number;
+    values: number[];
+}
+export interface SensorsPlugin {
     init(options: SensorOptions): Promise<SensorData | undefined>;
     getAvailableSensors(): Promise<{
         sensors: SensorType[];
@@ -63,5 +67,6 @@ export interface SensorsPlugin extends Omit<Plugin, 'addListener'> {
     requestPermissions(sensor: SensorData): Promise<WebPermissionStatus>;
     start(sensor: SensorData): Promise<void>;
     stop(sensor: SensorData): Promise<void>;
-    addListener(eventName: SensorEvent, listenerFunc: (...args: any[]) => void): Promise<PluginListenerHandle>;
+    addListener(eventName: SensorEvent, listenerFunc: (event: SensorListenerResult) => void): Promise<PluginListenerHandle> & PluginListenerHandle;
+    removeAllListeners(): Promise<void>;
 }

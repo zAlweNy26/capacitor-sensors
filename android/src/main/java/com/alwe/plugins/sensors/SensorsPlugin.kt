@@ -14,12 +14,24 @@ import com.getcapacitor.annotation.CapacitorPlugin
 @CapacitorPlugin(name = "Sensors")
 class SensorsPlugin : Plugin() {
     private var sensors: ArrayList<SensorInstance> = arrayListOf()
-    private var sensorsManager: SensorManager? = null
-    
+
+    companion object {
+        var sensorsManager: SensorManager? = null
+    }
+
+    override fun load() {
+        super.load()
+        sensorsManager = this.context.getSystemService(Context.SENSOR_SERVICE) as SensorManager
+    }
+
     @PluginMethod
     fun init(call: PluginCall) {
         val type = call.getInt("type")?.toEnum<SensorType>()!!
         val delay = call.getInt("delay", 3)?.toEnum<SensorDelay>()!!
+
+        if (type.name == "ABSOLUTE_ORIENTATION" || type.name == "RELATIVE_ORIENTATION") {
+            call.unimplemented("The absolute/relative orientation is not implemented!")
+        }
 
         if (!isPresent(type)) {
             call.resolve()
@@ -29,7 +41,7 @@ class SensorsPlugin : Plugin() {
         var newSensor = this.sensors.find { it.type == type }
 
         if (newSensor == null) {
-            newSensor = SensorInstance(::notifyListeners, sensorsManager!!, type, delay)
+            newSensor = SensorInstance(::notifyListeners, type, delay)
             this.sensors.add(newSensor)
         }
 
@@ -37,17 +49,11 @@ class SensorsPlugin : Plugin() {
     }
 
     private fun isPresent(sensor: SensorType): Boolean {
-        if (sensorsManager == null) {
-            sensorsManager = this.context.getSystemService(Context.SENSOR_SERVICE) as SensorManager
-        }
         return sensorsManager?.getDefaultSensor(sensor.type) != null
     }
 
     @PluginMethod
     fun getAvailableSensors(call: PluginCall) {
-        if (sensorsManager == null) {
-            sensorsManager = this.context.getSystemService(Context.SENSOR_SERVICE) as SensorManager
-        }
         val sensorsList = sensorsManager?.getSensorList(Sensor.TYPE_ALL)?.map { it.type } ?: listOf()
         val list = JSArray(sensorsList)
         val ret = JSObject()
@@ -57,13 +63,13 @@ class SensorsPlugin : Plugin() {
 
     @PluginMethod
     fun start(call: PluginCall) {
-        val sensor = call.data.getString("type")
-        this.sensors.find { it.type.name == sensor }?.start()
+        val sensor = call.data.getInt("type").toEnum<SensorType>()!!
+        this.sensors.find { it.type == sensor }?.start()
     }
 
     @PluginMethod
     fun stop(call: PluginCall) {
-        val sensor = call.data.getString("type")
-        this.sensors.find { it.type.name == sensor }?.stop()
+        val sensor = call.data.getInt("type").toEnum<SensorType>()!!
+        this.sensors.find { it.type == sensor }?.stop()
     }
 }

@@ -3,29 +3,27 @@ package com.alwe.plugins.sensors
 import android.hardware.Sensor
 import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
-import android.hardware.SensorManager
 import android.util.Log
 import com.getcapacitor.JSArray
 import com.getcapacitor.JSObject
 
 class SensorInstance(
-    private val notify: (eventName: String, data: JSObject) -> Unit,
-    private val manager: SensorManager,
+    private val notify: (eventName: String, data: JSObject, retainUntilConsumed: Boolean) -> Unit,
     val type: SensorType,
     private val delay: SensorDelay = SensorDelay.NORMAL
 ) : SensorEventListener {
-    private var sensor = manager.getDefaultSensor(type.type)
+    private var sensor = SensorsPlugin.sensorsManager?.getDefaultSensor(type.type)
 
     fun init(): JSObject {
         val infos = JSObject()
-        infos.put("vendor", sensor.vendor)
-        infos.put("version", sensor.version)
-        infos.put("type", sensor.type)
-        infos.put("maxRange", sensor.maximumRange)
-        infos.put("resolution", sensor.resolution)
-        infos.put("power", sensor.power)
-        infos.put("minDelay", sensor.minDelay)
-        infos.put("maxDelay", sensor.maxDelay)
+        infos.put("vendor", sensor?.vendor)
+        infos.put("version", sensor?.version)
+        infos.put("type", sensor?.type)
+        infos.put("maxRange", sensor?.maximumRange)
+        infos.put("resolution", sensor?.resolution)
+        infos.put("power", sensor?.power)
+        infos.put("minDelay", sensor?.minDelay)
+        infos.put("maxDelay", sensor?.maxDelay)
 
         val ret = JSObject()
         ret.put("infos", infos)
@@ -36,14 +34,14 @@ class SensorInstance(
 
     fun start() {
         if (this.sensor != null) {
-            this.manager.registerListener(this, this.sensor, this.delay.ordinal)
-            Log.d("Start", "Sensor: " + this.type.toString())
+            SensorsPlugin.sensorsManager?.registerListener(this, this.sensor, this.delay.ordinal)
+            Log.d("Start", "Sensor: " + this.type.name)
         }
     }
 
     fun stop() {
-        this.manager.unregisterListener(this)
-        Log.d("Stop", "Sensor: " + this.type.toString())
+        SensorsPlugin.sensorsManager?.unregisterListener(this)
+        Log.d("Stop", "Sensor: " + this.type.name)
     }
 
     override fun onSensorChanged(event: SensorEvent?) {
@@ -53,7 +51,7 @@ class SensorInstance(
         content.put("timestamp", event?.timestamp)
         content.put("values", JSArray(event?.values))
 
-        this.notify(this.type.name, content)
+        notify(this.type.name, content, true)
     }
 
     override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {}
