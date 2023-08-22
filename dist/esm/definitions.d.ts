@@ -67,6 +67,6 @@ export interface SensorsPlugin {
     requestPermissions(sensor: SensorData): Promise<WebPermissionStatus>;
     start(sensor: SensorData): Promise<void>;
     stop(sensor: SensorData): Promise<void>;
-    addListener(eventName: SensorEvent, listenerFunc: (event: SensorListenerResult) => void): Promise<PluginListenerHandle> & PluginListenerHandle;
+    addListener(eventName: SensorEvent, listenerFunc: (event: SensorListenerResult) => void): Promise<PluginListenerHandle>;
     removeAllListeners(): Promise<void>;
 }

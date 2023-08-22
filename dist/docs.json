@@ -93,7 +93,7 @@
       },
       {
         "name": "addListener",
-        "signature": "(eventName: SensorEvent, listenerFunc: (event: SensorListenerResult) => void) => Promise<PluginListenerHandle> & PluginListenerHandle",
+        "signature": "(eventName: SensorEvent, listenerFunc: (event: SensorListenerResult) => void) => Promise<PluginListenerHandle>",
         "parameters": [
           {
             "name": "eventName",
@@ -106,7 +106,7 @@
             "type": "(event: SensorListenerResult) => void"
           }
         ],
-        "returns": "Promise<PluginListenerHandle> & PluginListenerHandle",
+        "returns": "Promise<PluginListenerHandle>",
         "tags": [],
         "docs": "",
         "complexTypes": [
