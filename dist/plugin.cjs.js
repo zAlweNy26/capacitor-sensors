@@ -91,8 +91,8 @@ class SensorWeb {
             if ('z' in this.sensor)
                 values.push(this.sensor.z);
             const result = {
-                accuracy: 0,
-                timestamp: (_a = this.sensor.timestamp) !== null && _a !== void 0 ? _a : 0,
+                accuracy: -1,
+                timestamp: (_a = this.sensor.timestamp) !== null && _a !== void 0 ? _a : -1,
                 values,
             };
             this.notify(exports.SensorType[this.type], result);
