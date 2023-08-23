@@ -1,7 +1,7 @@
 import { WebPlugin } from '@capacitor/core';
 
-import type { SensorsPlugin, SensorOptions, SensorData, WebPermissionStatus } from './definitions';
-import { SensorDelay, SensorType, SensorListenerResult } from './definitions';
+import type { SensorsPlugin, SensorOptions, WebPermissionStatus } from './definitions';
+import { SensorDelay, SensorType, SensorListenerResult, SensorData } from './definitions';
 
 const webSupportedSensors: Record<string, SensorType> = {
   AbsoluteOrientationSensor: SensorType.ABSOLUTE_ORIENTATION,
@@ -12,6 +12,7 @@ const webSupportedSensors: Record<string, SensorType> = {
   LinearAccelerationSensor: SensorType.LINEAR_ACCELERATION,
   Magnetometer: SensorType.MAGNETOMETER,
   RelativeOrientationSensor: SensorType.RELATIVE_ORIENTATION,
+  ondevicemotion: SensorType.MOTION_DETECTOR
 };
 
 const webSensorFrequency: Record<SensorDelay, number> = {
@@ -90,17 +91,26 @@ export class SensorsWeb extends WebPlugin implements SensorsPlugin {
   }
 
   async start(sensor: SensorWeb): Promise<void> {
-    sensor.start();
+    if (sensor.type == SensorType.MOTION_DETECTOR) {
+      window.ondevicemotion = () => {
+        this.notifyListeners(SensorType[sensor.type], [1])
+      }
+    } else sensor.start();
   }
 
   async stop(sensor: SensorWeb): Promise<void> {
     sensor.stop();
   }
 
-  async init({ type, delay }: SensorOptions): Promise<SensorWeb | undefined> {
+  async init({ type, delay }: SensorOptions): Promise<SensorData | undefined> {
     if (this.isPresent(type)) {
-      const sensor = new SensorWeb(type, this.notifyListeners, delay);
-      return sensor;
+      if (type == SensorType.MOTION_DETECTOR) {
+        const sensor = { type } satisfies SensorData;
+        return sensor;
+      } else {
+        const sensor = new SensorWeb(type, this.notifyListeners, delay);
+        return sensor;
+      }
     }
     return undefined;
   }

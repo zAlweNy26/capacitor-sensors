@@ -13,7 +13,7 @@ import com.getcapacitor.annotation.CapacitorPlugin
 
 @CapacitorPlugin(name = "Sensors")
 class SensorsPlugin : Plugin() {
-    private var sensors: ArrayList<SensorInstance> = arrayListOf()
+    private var sensors: ArrayList<PluginSensor> = arrayListOf()
 
     companion object {
         var sensorsManager: SensorManager? = null
@@ -29,10 +29,6 @@ class SensorsPlugin : Plugin() {
         val type = call.getInt("type")?.toEnum<SensorType>()!!
         val delay = call.getInt("delay", 3)?.toEnum<SensorDelay>()!!
 
-        if (type.name == "ABSOLUTE_ORIENTATION" || type.name == "RELATIVE_ORIENTATION") {
-            call.unimplemented("The absolute/relative orientation is not implemented!")
-        }
-
         if (!isPresent(type)) {
             call.resolve()
             return
@@ -41,7 +37,11 @@ class SensorsPlugin : Plugin() {
         var newSensor = this.sensors.find { it.type == type }
 
         if (newSensor == null) {
-            newSensor = SensorInstance(::notifyListeners, type, delay)
+            newSensor = if (type == SensorType.ABSOLUTE_ORIENTATION || type == SensorType.RELATIVE_ORIENTATION) {
+                Orientation(::notifyListeners, type, delay)
+            } else {
+                SensorInstance(::notifyListeners, type, delay)
+            }
             this.sensors.add(newSensor)
         }
 
@@ -54,7 +54,7 @@ class SensorsPlugin : Plugin() {
 
     @PluginMethod
     fun getAvailableSensors(call: PluginCall) {
-        val sensorsList = sensorsManager?.getSensorList(Sensor.TYPE_ALL)?.map { it.type } ?: listOf()
+        val sensorsList = sensorsManager?.getSensorList(Sensor.TYPE_ALL)?.map { SensorType.fromInt(it.type)?.ordinal } ?: listOf()
         val list = JSArray(sensorsList)
         val ret = JSObject()
         ret.put("sensors", list)
