@@ -36,7 +36,7 @@ const webNeededPerms: Record<number, (keyof WebPermissionStatus)[]> = {
 const getWindowProperty = (type: SensorType) =>
   Object.keys(webSupportedSensors).find((key) => webSupportedSensors[key] === type);
 
-export class SensorWeb implements SensorData {
+class WebSensor implements SensorData {
   private sensor!: Sensor;
 
   constructor(
@@ -90,7 +90,7 @@ export class SensorsWeb extends WebPlugin implements SensorsPlugin {
     }, {} as WebPermissionStatus);
   }
 
-  async start(sensor: SensorWeb): Promise<void> {
+  async start(sensor: WebSensor): Promise<void> {
     if (sensor.type == SensorType.MOTION_DETECTOR) {
       window.ondevicemotion = () => {
         this.notifyListeners(SensorType[sensor.type], [1]);
@@ -98,7 +98,7 @@ export class SensorsWeb extends WebPlugin implements SensorsPlugin {
     } else sensor.start();
   }
 
-  async stop(sensor: SensorWeb): Promise<void> {
+  async stop(sensor: WebSensor): Promise<void> {
     sensor.stop();
   }
 
@@ -108,7 +108,7 @@ export class SensorsWeb extends WebPlugin implements SensorsPlugin {
         const sensor = { type } satisfies SensorData;
         return sensor;
       } else {
-        const sensor = new SensorWeb(type, this.notifyListeners, delay);
+        const sensor = new WebSensor(type, this.notifyListeners, delay);
         return sensor;
       }
     }
