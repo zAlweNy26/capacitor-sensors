@@ -1,6 +1,18 @@
 package com.alwe.plugins.sensors
 
 import android.hardware.Sensor
+import android.hardware.SensorEventListener
+import com.getcapacitor.JSObject
+
+interface PluginSensor : SensorEventListener {
+    val notify: (eventName: String, data: JSObject, retainUntilConsumed: Boolean) -> Unit
+    val type: SensorType
+    val delay: SensorDelay
+
+    fun init(): JSObject
+    fun start()
+    fun stop()
+}
 
 enum class SensorDelay {
     FASTEST, // Get sensor data as fast as possible
@@ -32,7 +44,12 @@ enum class SensorType(val type: Int) {
     STEP_COUNTER(Sensor.TYPE_STEP_COUNTER),
     STEP_DETECTOR(Sensor.TYPE_STEP_DETECTOR),
     ABSOLUTE_ORIENTATION(-1),
-    RELATIVE_ORIENTATION(-2),
+    RELATIVE_ORIENTATION(-2);
+
+    companion object {
+        private val map = SensorType.values().associateBy(SensorType::type)
+        fun fromInt(type: Int) = map[type]
+    }
 }
 
 inline fun <reified T : Enum<T>> Int.toEnum(): T? {

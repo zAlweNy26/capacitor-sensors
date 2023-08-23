@@ -20,28 +20,21 @@ npx cap sync
 | :------------------ | :------ | :-- | :-- |
 | init                | ✅      | ❌  | ✅  |
 | getAvailableSensors | ✅      | ❌  | ✅  |
-| requestPermissions  | ❌      | ❌  | ✅  |
 | start               | ✅      | ❌  | ✅  |
 | stop                | ✅      | ❌  | ✅  |
 | addListener         | ✅      | ❌  | ✅  |
 | removeAllListeners  | ✅      | ❌  | ✅  |
+| requestPermissions  | ❌      | ❌  | ✅  |
 
 ## Supported sensors
 
 | Sensors                           | Android | iOS | Web |
 | :-------------------------------- | :------ | :-- | :-- |
-| **`AMBIENT_LIGHT`**               | ✅      | ❌  | ✅  |
-| **`ACCELEROMETER`**               | ✅      | ❌  | ✅  |
 | **`TEMPERATURE`**                 | ✅      | ❌  | ❌  |
 | **`GAME_ROTATION_VECTOR`**        | ✅      | ❌  | ❌  |
 | **`GEOMAGNETIC_ROTATION_VECTOR`** | ✅      | ❌  | ❌  |
-| **`GRAVITY`**                     | ✅      | ❌  | ✅  |
-| **`GYROSCOPE`**                   | ✅      | ❌  | ✅  |
 | **`HEART_BEAT`**                  | ✅      | ❌  | ❌  |
 | **`HEART_RATE`**                  | ✅      | ❌  | ❌  |
-| **`LINEAR_ACCELERATION`**         | ✅      | ❌  | ✅  |
-| **`MAGNETOMETER`**                | ✅      | ❌  | ✅  |
-| **`MOTION_DETECTOR`**             | ✅      | ❌  | ❌  |
 | **`POSE_6DOF`**                   | ✅      | ❌  | ❌  |
 | **`PRESSURE`**                    | ✅      | ❌  | ❌  |
 | **`PROXIMITY`**                   | ✅      | ❌  | ❌  |
@@ -51,8 +44,15 @@ npx cap sync
 | **`STATIONARY_DETECTOR`**         | ✅      | ❌  | ❌  |
 | **`STEP_COUNTER`**                | ✅      | ❌  | ❌  |
 | **`STEP_DETECTOR`**               | ✅      | ❌  | ❌  |
-| **`ABSOLUTE_ORIENTATION`**        | ❌      | ❌  | ✅  |
-| **`RELATIVE_ORIENTATION`**        | ❌      | ❌  | ✅  |
+| **`MOTION_DETECTOR`**             | ✅      | ❌  | ✅  |
+| **`LINEAR_ACCELERATION`**         | ✅      | ❌  | ✅  |
+| **`MAGNETOMETER`**                | ✅      | ❌  | ✅  |
+| **`GRAVITY`**                     | ✅      | ❌  | ✅  |
+| **`GYROSCOPE`**                   | ✅      | ❌  | ✅  |
+| **`AMBIENT_LIGHT`**               | ✅      | ❌  | ✅  |
+| **`ACCELEROMETER`**               | ✅      | ❌  | ✅  |
+| **`ABSOLUTE_ORIENTATION`**        | ✅      | ❌  | ✅  |
+| **`RELATIVE_ORIENTATION`**        | ✅      | ❌  | ✅  |
 
 ## API
 
