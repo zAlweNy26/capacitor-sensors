@@ -67,7 +67,7 @@ var capacitorSensors = (function (exports, core) {
         [exports.SensorType.RELATIVE_ORIENTATION]: ['accelerometer', 'gyroscope'],
     };
     const getWindowProperty = (type) => Object.keys(webSupportedSensors).find((key) => webSupportedSensors[key] === type);
-    class SensorWeb {
+    class WebSensor {
         constructor(type, notify, delay = exports.SensorDelay.NORMAL) {
             var _a;
             this.type = type;
@@ -133,7 +133,7 @@ var capacitorSensors = (function (exports, core) {
                     return sensor;
                 }
                 else {
-                    const sensor = new SensorWeb(type, this.notifyListeners, delay);
+                    const sensor = new WebSensor(type, this.notifyListeners, delay);
                     return sensor;
                 }
             }
@@ -160,7 +160,6 @@ var capacitorSensors = (function (exports, core) {
 
     var web = /*#__PURE__*/Object.freeze({
         __proto__: null,
-        SensorWeb: SensorWeb,
         SensorsWeb: SensorsWeb
     });
 
