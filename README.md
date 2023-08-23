@@ -30,6 +30,15 @@ npx cap sync
 
 | Sensors                           | Android | iOS | Web |
 | :-------------------------------- | :------ | :-- | :-- |
+| **`MOTION_DETECTOR`**             | ✅      | ❌  | ✅  |
+| **`LINEAR_ACCELERATION`**         | ✅      | ❌  | ✅  |
+| **`MAGNETOMETER`**                | ✅      | ❌  | ✅  |
+| **`GRAVITY`**                     | ✅      | ❌  | ✅  |
+| **`GYROSCOPE`**                   | ✅      | ❌  | ✅  |
+| **`AMBIENT_LIGHT`**               | ✅      | ❌  | ✅  |
+| **`ACCELEROMETER`**               | ✅      | ❌  | ✅  |
+| **`ABSOLUTE_ORIENTATION`**        | ✅      | ❌  | ✅  |
+| **`RELATIVE_ORIENTATION`**        | ✅      | ❌  | ✅  |
 | **`TEMPERATURE`**                 | ✅      | ❌  | ❌  |
 | **`GAME_ROTATION_VECTOR`**        | ✅      | ❌  | ❌  |
 | **`GEOMAGNETIC_ROTATION_VECTOR`** | ✅      | ❌  | ❌  |
@@ -44,15 +53,6 @@ npx cap sync
 | **`STATIONARY_DETECTOR`**         | ✅      | ❌  | ❌  |
 | **`STEP_COUNTER`**                | ✅      | ❌  | ❌  |
 | **`STEP_DETECTOR`**               | ✅      | ❌  | ❌  |
-| **`MOTION_DETECTOR`**             | ✅      | ❌  | ✅  |
-| **`LINEAR_ACCELERATION`**         | ✅      | ❌  | ✅  |
-| **`MAGNETOMETER`**                | ✅      | ❌  | ✅  |
-| **`GRAVITY`**                     | ✅      | ❌  | ✅  |
-| **`GYROSCOPE`**                   | ✅      | ❌  | ✅  |
-| **`AMBIENT_LIGHT`**               | ✅      | ❌  | ✅  |
-| **`ACCELEROMETER`**               | ✅      | ❌  | ✅  |
-| **`ABSOLUTE_ORIENTATION`**        | ✅      | ❌  | ✅  |
-| **`RELATIVE_ORIENTATION`**        | ✅      | ❌  | ✅  |
 
 ## API
 
