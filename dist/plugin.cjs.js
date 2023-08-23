@@ -68,7 +68,7 @@ const webNeededPerms = {
     [exports.SensorType.RELATIVE_ORIENTATION]: ['accelerometer', 'gyroscope'],
 };
 const getWindowProperty = (type) => Object.keys(webSupportedSensors).find((key) => webSupportedSensors[key] === type);
-class SensorWeb {
+class WebSensor {
     constructor(type, notify, delay = exports.SensorDelay.NORMAL) {
         var _a;
         this.type = type;
@@ -134,7 +134,7 @@ class SensorsWeb extends core.WebPlugin {
                 return sensor;
             }
             else {
-                const sensor = new SensorWeb(type, this.notifyListeners, delay);
+                const sensor = new WebSensor(type, this.notifyListeners, delay);
                 return sensor;
             }
         }
@@ -161,7 +161,6 @@ class SensorsWeb extends core.WebPlugin {
 
 var web = /*#__PURE__*/Object.freeze({
     __proto__: null,
-    SensorWeb: SensorWeb,
     SensorsWeb: SensorsWeb
 });
 
