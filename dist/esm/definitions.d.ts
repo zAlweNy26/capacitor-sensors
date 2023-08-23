@@ -55,8 +55,8 @@ export interface SensorData extends SensorOptions {
     infos?: SensorInfos;
 }
 export interface SensorListenerResult {
-    accuracy: number;
-    timestamp: number;
+    accuracy?: number;
+    timestamp?: number;
     values: number[];
 }
 export interface SensorsPlugin {
