@@ -9,6 +9,7 @@ const webSupportedSensors = {
     LinearAccelerationSensor: SensorType.LINEAR_ACCELERATION,
     Magnetometer: SensorType.MAGNETOMETER,
     RelativeOrientationSensor: SensorType.RELATIVE_ORIENTATION,
+    ondevicemotion: SensorType.MOTION_DETECTOR,
 };
 const webSensorFrequency = {
     [SensorDelay.FASTEST]: 0,
@@ -75,15 +76,27 @@ export class SensorsWeb extends WebPlugin {
         }, {});
     }
     async start(sensor) {
-        sensor.start();
+        if (sensor.type == SensorType.MOTION_DETECTOR) {
+            window.ondevicemotion = () => {
+                this.notifyListeners(SensorType[sensor.type], [1]);
+            };
+        }
+        else
+            sensor.start();
     }
     async stop(sensor) {
         sensor.stop();
     }
     async init({ type, delay }) {
         if (this.isPresent(type)) {
-            const sensor = new SensorWeb(type, this.notifyListeners, delay);
-            return sensor;
+            if (type == SensorType.MOTION_DETECTOR) {
+                const sensor = { type };
+                return sensor;
+            }
+            else {
+                const sensor = new SensorWeb(type, this.notifyListeners, delay);
+                return sensor;
+            }
         }
         return undefined;
     }

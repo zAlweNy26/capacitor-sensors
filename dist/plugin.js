@@ -48,6 +48,7 @@ var capacitorSensors = (function (exports, core) {
         LinearAccelerationSensor: exports.SensorType.LINEAR_ACCELERATION,
         Magnetometer: exports.SensorType.MAGNETOMETER,
         RelativeOrientationSensor: exports.SensorType.RELATIVE_ORIENTATION,
+        ondevicemotion: exports.SensorType.MOTION_DETECTOR,
     };
     const webSensorFrequency = {
         [exports.SensorDelay.FASTEST]: 0,
@@ -114,15 +115,27 @@ var capacitorSensors = (function (exports, core) {
             }, {});
         }
         async start(sensor) {
-            sensor.start();
+            if (sensor.type == exports.SensorType.MOTION_DETECTOR) {
+                window.ondevicemotion = () => {
+                    this.notifyListeners(exports.SensorType[sensor.type], [1]);
+                };
+            }
+            else
+                sensor.start();
         }
         async stop(sensor) {
             sensor.stop();
         }
         async init({ type, delay }) {
             if (this.isPresent(type)) {
-                const sensor = new SensorWeb(type, this.notifyListeners, delay);
-                return sensor;
+                if (type == exports.SensorType.MOTION_DETECTOR) {
+                    const sensor = { type };
+                    return sensor;
+                }
+                else {
+                    const sensor = new SensorWeb(type, this.notifyListeners, delay);
+                    return sensor;
+                }
             }
             return undefined;
         }

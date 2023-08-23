@@ -12,7 +12,7 @@ const webSupportedSensors: Record<string, SensorType> = {
   LinearAccelerationSensor: SensorType.LINEAR_ACCELERATION,
   Magnetometer: SensorType.MAGNETOMETER,
   RelativeOrientationSensor: SensorType.RELATIVE_ORIENTATION,
-  ondevicemotion: SensorType.MOTION_DETECTOR
+  ondevicemotion: SensorType.MOTION_DETECTOR,
 };
 
 const webSensorFrequency: Record<SensorDelay, number> = {
@@ -93,8 +93,8 @@ export class SensorsWeb extends WebPlugin implements SensorsPlugin {
   async start(sensor: SensorWeb): Promise<void> {
     if (sensor.type == SensorType.MOTION_DETECTOR) {
       window.ondevicemotion = () => {
-        this.notifyListeners(SensorType[sensor.type], [1])
-      }
+        this.notifyListeners(SensorType[sensor.type], [1]);
+      };
     } else sensor.start();
   }
 
