@@ -24,7 +24,7 @@ npx cap sync
 | stop                | ✅      | ❌  | ✅  |
 | addListener         | ✅      | ❌  | ✅  |
 | removeAllListeners  | ✅      | ❌  | ✅  |
-| requestPermissions  | ❌      | ❌  | ✅  |
+| requestPermissions  | ✅      | ❌  | ✅  |
 
 ## Supported sensors
 

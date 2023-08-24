@@ -9,9 +9,18 @@ import com.getcapacitor.Plugin
 import com.getcapacitor.PluginCall
 import com.getcapacitor.PluginMethod
 import com.getcapacitor.annotation.CapacitorPlugin
+import com.getcapacitor.annotation.Permission
 
 
-@CapacitorPlugin(name = "Sensors")
+@CapacitorPlugin(
+    name = "Sensors",
+    permissions = [
+        Permission(
+            alias = "sensors",
+            strings = arrayOf()
+        )
+    ]
+)
 class SensorsPlugin : Plugin() {
     private var sensors: ArrayList<PluginSensor> = arrayListOf()
 
@@ -65,11 +74,6 @@ class SensorsPlugin : Plugin() {
     fun start(call: PluginCall) {
         val sensor = call.data.getInt("type").toEnum<SensorType>()!!
         this.sensors.find { it.type == sensor }?.start()
-    }
-
-    @PluginMethod
-    override fun requestPermissions(call: PluginCall) {
-        call.unimplemented("There is no need of permissions for the sensors in Android!")
     }
 
     @PluginMethod
