@@ -5,7 +5,7 @@ Get access to every sensor present in the device!
 ## Install
 
 ```bash
-npm install capacitor-sensors
+npm install @danyalwe/capacitor-sensors
 npx cap sync
 ```
 

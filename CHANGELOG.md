@@ -1,10 +1,4 @@
-# capacitor-sensors
-
-## 0.0.2
-
-### Patch Changes
-
-- a143076: Fixed publishing on NPM
+# @danyalwe/capacitor-sensors
 
 ## 0.0.1
 
