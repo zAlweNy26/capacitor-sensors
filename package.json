@@ -1,6 +1,6 @@
 {
-  "name": "capacitor-sensors",
-  "version": "0.0.1",
+  "name": "@alwe/capacitor-sensors",
+  "version": "0.0.0",
   "description": "Get access to every sensor present in the device!",
   "main": "dist/plugin.cjs.js",
   "module": "dist/esm/index.js",
@@ -17,10 +17,10 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/zAlweNy26/capacitor-sensors.git"
+    "url": "git+https://github.com/zAlweNy26/@alwe/capacitor-sensors.git"
   },
   "bugs": {
-    "url": "https://github.com/zAlweNy26/capacitor-sensors/issues"
+    "url": "https://github.com/zAlweNy26/@alwe/capacitor-sensors/issues"
   },
   "keywords": [
     "capacitor",
