@@ -2,4 +2,4 @@
 '@danyalwe/capacitor-sensors': patch
 ---
 
-First version
+Changed interfaces names

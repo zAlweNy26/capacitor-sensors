@@ -144,13 +144,13 @@ stop(sensor: SensorData) => Promise<void>
 ### addListener(...)
 
 ```typescript
-addListener(eventName: SensorEvent, listenerFunc: (event: SensorListenerResult) => void) => Promise<PluginListenerHandle>
+addListener(eventName: SensorEvent, listenerFunc: (event: SensorResult) => void) => Promise<PluginListenerHandle>
 ```
 
 | Param              | Type                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
 | ------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | **`eventName`**    | <code><a href="#sensorevent">SensorEvent</a></code> |
-| **`listenerFunc`** | <code>(event: <a href="#sensorlistenerresult">SensorListenerResult</a>) =&gt; void</code>                                                                                                                                                                                                                                                                                                                                                                                                 |
+| **`listenerFunc`** | <code>(event: <a href="#SensorResult">SensorResult</a>) =&gt; void</code>                                                                                                                                                                                                                                                                                                                                                                                                 |
 
 **Returns:** <code>Promise&lt;<a href="#pluginlistenerhandle">PluginListenerHandle</a>&gt;</code>
 
@@ -215,7 +215,7 @@ removeAllListeners() => Promise<void>
 | **`remove`** | <code>() =&gt; Promise&lt;void&gt;</code> |
 
 
-#### SensorListenerResult
+#### SensorResult
 
 | Prop            | Type                  |
 | --------------- | --------------------- |

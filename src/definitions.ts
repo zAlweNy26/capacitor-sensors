@@ -62,7 +62,7 @@ export interface SensorData extends SensorOptions {
   infos?: SensorInfos;
 }
 
-export interface SensorListenerResult {
+export interface SensorResult {
   accuracy?: number;
   timestamp?: number;
   values: number[];
@@ -78,7 +78,7 @@ export interface SensorsPlugin {
   stop(sensor: SensorData): Promise<void>;
   addListener(
     eventName: SensorEvent,
-    listenerFunc: (event: SensorListenerResult) => void,
+    listenerFunc: (event: SensorResult) => void,
   ): Promise<PluginListenerHandle>;
   removeAllListeners(): Promise<void>;
 }

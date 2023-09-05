@@ -1,7 +1,7 @@
 import { WebPlugin } from '@capacitor/core';
 
 import type { SensorsPlugin, SensorOptions, WebPermissionStatus } from './definitions';
-import { SensorDelay, SensorType, SensorListenerResult, SensorData } from './definitions';
+import { SensorDelay, SensorType, SensorResult, SensorData } from './definitions';
 
 const webSupportedSensors: Record<string, SensorType> = {
   AbsoluteOrientationSensor: SensorType.ABSOLUTE_ORIENTATION,
@@ -61,7 +61,7 @@ class WebSensor implements SensorData {
         accuracy: -1,
         timestamp: this.sensor.timestamp ?? -1,
         values,
-      } satisfies SensorListenerResult;
+      } satisfies SensorResult;
 
       this.notify(SensorType[this.type], result);
     });
