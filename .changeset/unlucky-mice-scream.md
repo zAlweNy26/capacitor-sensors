@@ -1,5 +1,5 @@
 ---
-'capacitor-sensors': patch
+'@danyalwe/capacitor-sensors': patch
 ---
 
-First version of the plugin
+First version

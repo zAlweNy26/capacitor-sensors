@@ -35,7 +35,7 @@
   "scripts": {
     "verify": "npm run verify:ios && npm run verify:android && npm run verify:web",
     "verify:ios": "cd ios && pod install && xcodebuild -workspace Plugin.xcworkspace -scheme Plugin -destination generic/platform=iOS && cd ..",
-    "verify:android": "cd android && ./gradlew clean build test && cd ..",
+    "verify:android": "cd android && gradlew clean build test && cd ..",
     "verify:web": "npm run build",
     "lint": "npm run eslint && npm run prettier -- --check && npm run swiftlint -- lint",
     "fmt": "npm run eslint -- --fix && npm run prettier -- --write && npm run swiftlint -- --fix --format",
@@ -49,10 +49,10 @@
     "release": "npm run build && changeset publish"
   },
   "devDependencies": {
-    "@capacitor/android": "^5.2.3",
-    "@capacitor/core": "^5.2.3",
+    "@capacitor/android": "^5.3.0",
+    "@capacitor/core": "^5.3.0",
     "@capacitor/docgen": "^0.2.1",
-    "@capacitor/ios": "^5.2.3",
+    "@capacitor/ios": "^5.3.0",
     "@changesets/cli": "^2.26.2",
     "@ionic/eslint-config": "^0.3.0",
     "@ionic/prettier-config": "^4.0.0",
@@ -60,11 +60,11 @@
     "@types/w3c-generic-sensor": "^1.0.6",
     "@typescript-eslint/eslint-plugin": "^5.62.0",
     "eslint": "^7.32.0",
-    "prettier": "~3.0.2",
-    "prettier-plugin-java": "~2.2.0",
+    "prettier": "~3.0.3",
+    "prettier-plugin-java": "~2.3.1",
     "prettier-plugin-kotlin": "^2.1.0",
     "rimraf": "^5.0.1",
-    "rollup": "^3.28.0",
+    "rollup": "^3.28.1",
     "swiftlint": "^1.0.2",
     "typescript": "~5.1.6"
   },
