@@ -1,7 +1,8 @@
 name: Publish
+
 on:
   workflow_run:
-    workflows: [CI]
+    workflows: [Build]
     branches: [main]
     types: [completed]
 

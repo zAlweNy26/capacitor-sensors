@@ -1,12 +1,11 @@
 name: Build
+
 on:
   push:
     branches:
       - "**"
     paths-ignore:
       - 'LICENSE'
-      - '**.md'
-      - '**.json'
       - '**ignore'
 
 jobs:

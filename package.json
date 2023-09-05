@@ -11,7 +11,7 @@
     "android/build.gradle",
     "dist/",
     "ios/Plugin/",
-    "AlweSensors.podspec"
+    "SensorsPlugin.podspec"
   ],
   "author": "zAlweNy26",
   "license": "MIT",
