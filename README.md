@@ -2,6 +2,10 @@
 
 Get access to every sensor present in the device!
 
+Supported Android version: `21+`
+Supported iOS version: `Not supported`
+Supported Browsers: `Chromium-based` 
+
 ## Install
 
 ```bash

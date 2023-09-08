@@ -3,3 +3,4 @@
 ---
 
 Changed interfaces names
+Changed minimum supported Android SDK version
