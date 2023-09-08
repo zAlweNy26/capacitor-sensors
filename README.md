@@ -2,9 +2,9 @@
 
 Get access to every sensor present in the device!
 
-Supported Android version: `21+`
-Supported iOS version: `Not supported`
-Supported Browsers: `Chromium-based` 
+Supported Android version: `21+`\
+Supported iOS version: `Not supported`\
+Supported Browsers: `Chromium-based`
 
 ## Install
 
@@ -13,7 +13,7 @@ npm install @danyalwe/capacitor-sensors
 npx cap sync
 ```
 
-### Todos
+## Todos
 
 - [ ] Improve documentation, add JSDoc strings
 - [ ] Add support for iOS
