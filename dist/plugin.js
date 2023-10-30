@@ -1,13 +1,31 @@
 var capacitorSensors = (function (exports, core) {
     'use strict';
 
+    /**
+     * Enum representing the delay rates for sensor data.
+     */
     exports.SensorDelay = void 0;
     (function (SensorDelay) {
+        /**
+         * Get sensor data as fast as possible.
+         */
         SensorDelay[SensorDelay["FASTEST"] = 0] = "FASTEST";
+        /**
+         * Rate suitable for games.
+         */
         SensorDelay[SensorDelay["GAME"] = 1] = "GAME";
+        /**
+         * Rate suitable for user interface.
+         */
         SensorDelay[SensorDelay["UI"] = 2] = "UI";
+        /**
+         * Default rate, suitable for screen orientation changes.
+         */
         SensorDelay[SensorDelay["NORMAL"] = 3] = "NORMAL";
     })(exports.SensorDelay || (exports.SensorDelay = {}));
+    /**
+     * Enum representing the types of sensors available in the application.
+     */
     exports.SensorType = void 0;
     (function (SensorType) {
         SensorType[SensorType["AMBIENT_LIGHT"] = 0] = "AMBIENT_LIGHT";

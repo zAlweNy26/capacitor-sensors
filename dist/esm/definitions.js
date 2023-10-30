@@ -1,10 +1,28 @@
+/**
+ * Enum representing the delay rates for sensor data.
+ */
 export var SensorDelay;
 (function (SensorDelay) {
+    /**
+     * Get sensor data as fast as possible.
+     */
     SensorDelay[SensorDelay["FASTEST"] = 0] = "FASTEST";
+    /**
+     * Rate suitable for games.
+     */
     SensorDelay[SensorDelay["GAME"] = 1] = "GAME";
+    /**
+     * Rate suitable for user interface.
+     */
     SensorDelay[SensorDelay["UI"] = 2] = "UI";
+    /**
+     * Default rate, suitable for screen orientation changes.
+     */
     SensorDelay[SensorDelay["NORMAL"] = 3] = "NORMAL";
 })(SensorDelay || (SensorDelay = {}));
+/**
+ * Enum representing the types of sensors available in the application.
+ */
 export var SensorType;
 (function (SensorType) {
     SensorType[SensorType["AMBIENT_LIGHT"] = 0] = "AMBIENT_LIGHT";
