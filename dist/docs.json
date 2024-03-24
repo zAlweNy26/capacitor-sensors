@@ -1,0 +1,580 @@
+{
+  "api": {
+    "name": "SensorsPlugin",
+    "slug": "sensorsplugin",
+    "docs": "The Sensors Plugin interface.",
+    "tags": [],
+    "methods": [
+      {
+        "name": "init",
+        "signature": "(options: SensorOptions) => Promise<SensorData | undefined>",
+        "parameters": [
+          {
+            "name": "options",
+            "docs": "- The options to initialize the sensor plugin with.",
+            "type": "SensorOptions"
+          }
+        ],
+        "returns": "Promise<SensorData | undefined>",
+        "tags": [
+          {
+            "name": "param",
+            "text": "options - The options to initialize the sensor plugin with."
+          },
+          {
+            "name": "returns",
+            "text": "A Promise that resolves to the sensor data, or undefined if initialization failed."
+          }
+        ],
+        "docs": "Initializes the sensor plugin with the given options.",
+        "complexTypes": [
+          "SensorData",
+          "SensorOptions"
+        ],
+        "slug": "init"
+      },
+      {
+        "name": "getAvailableSensors",
+        "signature": "() => Promise<{ sensors: SensorType[]; }>",
+        "parameters": [],
+        "returns": "Promise<{ sensors: SensorType[]; }>",
+        "tags": [
+          {
+            "name": "returns",
+            "text": "A Promise that resolves to an object containing the available sensors."
+          }
+        ],
+        "docs": "Gets a list of available sensors.",
+        "complexTypes": [
+          "SensorType"
+        ],
+        "slug": "getavailablesensors"
+      },
+      {
+        "name": "requestPermissions",
+        "signature": "(sensor: SensorData) => Promise<WebPermissionStatus>",
+        "parameters": [
+          {
+            "name": "sensor",
+            "docs": "- The sensor to request permission for.",
+            "type": "SensorData"
+          }
+        ],
+        "returns": "Promise<WebPermissionStatus>",
+        "tags": [
+          {
+            "name": "param",
+            "text": "sensor - The sensor to request permission for."
+          },
+          {
+            "name": "returns",
+            "text": "A Promise that resolves to the permission status."
+          }
+        ],
+        "docs": "Requests permission to use the given sensor.",
+        "complexTypes": [
+          "WebPermissionStatus",
+          "SensorData"
+        ],
+        "slug": "requestpermissions"
+      },
+      {
+        "name": "start",
+        "signature": "(sensor: SensorData) => Promise<void>",
+        "parameters": [
+          {
+            "name": "sensor",
+            "docs": "- The sensor to start.",
+            "type": "SensorData"
+          }
+        ],
+        "returns": "Promise<void>",
+        "tags": [
+          {
+            "name": "param",
+            "text": "sensor - The sensor to start."
+          },
+          {
+            "name": "returns",
+            "text": "A Promise that resolves when the sensor has started."
+          }
+        ],
+        "docs": "Starts the given sensor.",
+        "complexTypes": [
+          "SensorData"
+        ],
+        "slug": "start"
+      },
+      {
+        "name": "stop",
+        "signature": "(sensor: SensorData) => Promise<void>",
+        "parameters": [
+          {
+            "name": "sensor",
+            "docs": "- The sensor to stop.",
+            "type": "SensorData"
+          }
+        ],
+        "returns": "Promise<void>",
+        "tags": [
+          {
+            "name": "param",
+            "text": "sensor - The sensor to stop."
+          },
+          {
+            "name": "returns",
+            "text": "A Promise that resolves when the sensor has stopped."
+          }
+        ],
+        "docs": "Stops the given sensor.",
+        "complexTypes": [
+          "SensorData"
+        ],
+        "slug": "stop"
+      },
+      {
+        "name": "addListener",
+        "signature": "(eventName: SensorEvent, listenerFunc: (event: SensorResult) => void) => Promise<PluginListenerHandle>",
+        "parameters": [
+          {
+            "name": "eventName",
+            "docs": "- The name of the event to listen for.",
+            "type": "'AMBIENT_LIGHT' | 'ACCELEROMETER' | 'TEMPERATURE' | 'GAME_ROTATION_VECTOR' | 'GEOMAGNETIC_ROTATION_VECTOR' | 'GRAVITY' | 'GYROSCOPE' | 'HEART_BEAT' | 'HEART_RATE' | 'LINEAR_ACCELERATION' | 'MAGNETOMETER' | 'MOTION_DETECTOR' | 'POSE_6DOF' | 'PRESSURE' | 'PROXIMITY' | 'RELATIVE_HUMIDITY' | 'ROTATION_VECTOR' | 'SIGNIFICANT_MOTION' | 'STATIONARY_DETECTOR' | 'STEP_COUNTER' | 'STEP_DETECTOR' | 'ABSOLUTE_ORIENTATION' | 'RELATIVE_ORIENTATION'"
+          },
+          {
+            "name": "listenerFunc",
+            "docs": "- The function to call when the event is triggered.",
+            "type": "(event: SensorResult) => void"
+          }
+        ],
+        "returns": "Promise<PluginListenerHandle>",
+        "tags": [
+          {
+            "name": "param",
+            "text": "eventName - The name of the event to listen for."
+          },
+          {
+            "name": "param",
+            "text": "listenerFunc - The function to call when the event is triggered."
+          },
+          {
+            "name": "returns",
+            "text": "A Promise that resolves to a handle for the listener."
+          }
+        ],
+        "docs": "Adds a listener for the given sensor event.",
+        "complexTypes": [
+          "PluginListenerHandle",
+          "SensorEvent",
+          "SensorResult"
+        ],
+        "slug": "addlistenerambient_light--accelerometer--temperature--game_rotation_vector--geomagnetic_rotation_vector--gravity--gyroscope--heart_beat--heart_rate--linear_acceleration--magnetometer--motion_detector--pose_6dof--pressure--proximity--relative_humidity--rotation_vector--significant_motion--stationary_detector--step_counter--step_detector--absolute_orientation--relative_orientation"
+      },
+      {
+        "name": "removeAllListeners",
+        "signature": "() => Promise<void>",
+        "parameters": [],
+        "returns": "Promise<void>",
+        "tags": [
+          {
+            "name": "returns",
+            "text": "A Promise that resolves when all listeners have been removed."
+          }
+        ],
+        "docs": "Removes all listeners for the sensor plugin.",
+        "complexTypes": [],
+        "slug": "removealllisteners"
+      }
+    ],
+    "properties": []
+  },
+  "interfaces": [
+    {
+      "name": "SensorData",
+      "slug": "sensordata",
+      "docs": "Represents the data returned by a sensor, including any additional information about the sensor.",
+      "tags": [],
+      "methods": [],
+      "properties": [
+        {
+          "name": "infos",
+          "tags": [],
+          "docs": "",
+          "complexTypes": [
+            "SensorInfos"
+          ],
+          "type": "SensorInfos"
+        }
+      ]
+    },
+    {
+      "name": "SensorInfos",
+      "slug": "sensorinfos",
+      "docs": "Interface representing sensor information.",
+      "tags": [],
+      "methods": [],
+      "properties": [
+        {
+          "name": "vendor",
+          "tags": [],
+          "docs": "The vendor of the sensor.",
+          "complexTypes": [],
+          "type": "string"
+        },
+        {
+          "name": "version",
+          "tags": [],
+          "docs": "The version of the sensor.",
+          "complexTypes": [],
+          "type": "number"
+        },
+        {
+          "name": "type",
+          "tags": [],
+          "docs": "The type of the sensor.",
+          "complexTypes": [],
+          "type": "number"
+        },
+        {
+          "name": "maxRange",
+          "tags": [],
+          "docs": "The maximum range of the sensor.",
+          "complexTypes": [],
+          "type": "number"
+        },
+        {
+          "name": "resolution",
+          "tags": [],
+          "docs": "The resolution of the sensor.",
+          "complexTypes": [],
+          "type": "number"
+        },
+        {
+          "name": "power",
+          "tags": [],
+          "docs": "The power consumption of the sensor.",
+          "complexTypes": [],
+          "type": "number"
+        },
+        {
+          "name": "minDelay",
+          "tags": [],
+          "docs": "The minimum delay between sensor readings.",
+          "complexTypes": [],
+          "type": "number"
+        },
+        {
+          "name": "maxDelay",
+          "tags": [],
+          "docs": "The maximum delay between sensor readings.",
+          "complexTypes": [],
+          "type": "number"
+        }
+      ]
+    },
+    {
+      "name": "SensorOptions",
+      "slug": "sensoroptions",
+      "docs": "",
+      "tags": [],
+      "methods": [],
+      "properties": [
+        {
+          "name": "type",
+          "tags": [],
+          "docs": "",
+          "complexTypes": [
+            "SensorType"
+          ],
+          "type": "SensorType"
+        },
+        {
+          "name": "delay",
+          "tags": [],
+          "docs": "",
+          "complexTypes": [
+            "SensorDelay"
+          ],
+          "type": "SensorDelay"
+        }
+      ]
+    },
+    {
+      "name": "WebPermissionStatus",
+      "slug": "webpermissionstatus",
+      "docs": "Interface representing the permission status for various web sensors.",
+      "tags": [],
+      "methods": [],
+      "properties": [
+        {
+          "name": "accelerometer",
+          "tags": [],
+          "docs": "",
+          "complexTypes": [
+            "PermissionState"
+          ],
+          "type": "PermissionState"
+        },
+        {
+          "name": "'ambient-light-sensor'",
+          "tags": [],
+          "docs": "",
+          "complexTypes": [
+            "PermissionState"
+          ],
+          "type": "PermissionState"
+        },
+        {
+          "name": "gyroscope",
+          "tags": [],
+          "docs": "",
+          "complexTypes": [
+            "PermissionState"
+          ],
+          "type": "PermissionState"
+        },
+        {
+          "name": "magnetometer",
+          "tags": [],
+          "docs": "",
+          "complexTypes": [
+            "PermissionState"
+          ],
+          "type": "PermissionState"
+        }
+      ]
+    },
+    {
+      "name": "PluginListenerHandle",
+      "slug": "pluginlistenerhandle",
+      "docs": "",
+      "tags": [],
+      "methods": [],
+      "properties": [
+        {
+          "name": "remove",
+          "tags": [],
+          "docs": "",
+          "complexTypes": [],
+          "type": "() => Promise<void>"
+        }
+      ]
+    },
+    {
+      "name": "SensorResult",
+      "slug": "sensorresult",
+      "docs": "Represents the result of a sensor reading.",
+      "tags": [],
+      "methods": [],
+      "properties": [
+        {
+          "name": "accuracy",
+          "tags": [],
+          "docs": "The accuracy of the sensor reading, if available.",
+          "complexTypes": [],
+          "type": "number | undefined"
+        },
+        {
+          "name": "timestamp",
+          "tags": [],
+          "docs": "The timestamp of the sensor reading, if available.",
+          "complexTypes": [],
+          "type": "number | undefined"
+        },
+        {
+          "name": "values",
+          "tags": [],
+          "docs": "The values obtained from the sensor reading.",
+          "complexTypes": [],
+          "type": "number[]"
+        }
+      ]
+    }
+  ],
+  "enums": [
+    {
+      "name": "SensorType",
+      "slug": "sensortype",
+      "members": [
+        {
+          "name": "AMBIENT_LIGHT",
+          "tags": [],
+          "docs": ""
+        },
+        {
+          "name": "ACCELEROMETER",
+          "tags": [],
+          "docs": ""
+        },
+        {
+          "name": "TEMPERATURE",
+          "tags": [],
+          "docs": ""
+        },
+        {
+          "name": "GAME_ROTATION_VECTOR",
+          "tags": [],
+          "docs": ""
+        },
+        {
+          "name": "GEOMAGNETIC_ROTATION_VECTOR",
+          "tags": [],
+          "docs": ""
+        },
+        {
+          "name": "GRAVITY",
+          "tags": [],
+          "docs": ""
+        },
+        {
+          "name": "GYROSCOPE",
+          "tags": [],
+          "docs": ""
+        },
+        {
+          "name": "HEART_BEAT",
+          "tags": [],
+          "docs": ""
+        },
+        {
+          "name": "HEART_RATE",
+          "tags": [],
+          "docs": ""
+        },
+        {
+          "name": "LINEAR_ACCELERATION",
+          "tags": [],
+          "docs": ""
+        },
+        {
+          "name": "MAGNETOMETER",
+          "tags": [],
+          "docs": ""
+        },
+        {
+          "name": "MOTION_DETECTOR",
+          "tags": [],
+          "docs": ""
+        },
+        {
+          "name": "POSE_6DOF",
+          "tags": [],
+          "docs": ""
+        },
+        {
+          "name": "PRESSURE",
+          "tags": [],
+          "docs": ""
+        },
+        {
+          "name": "PROXIMITY",
+          "tags": [],
+          "docs": ""
+        },
+        {
+          "name": "RELATIVE_HUMIDITY",
+          "tags": [],
+          "docs": ""
+        },
+        {
+          "name": "ROTATION_VECTOR",
+          "tags": [],
+          "docs": ""
+        },
+        {
+          "name": "SIGNIFICANT_MOTION",
+          "tags": [],
+          "docs": ""
+        },
+        {
+          "name": "STATIONARY_DETECTOR",
+          "tags": [],
+          "docs": ""
+        },
+        {
+          "name": "STEP_COUNTER",
+          "tags": [],
+          "docs": ""
+        },
+        {
+          "name": "STEP_DETECTOR",
+          "tags": [],
+          "docs": ""
+        },
+        {
+          "name": "ABSOLUTE_ORIENTATION",
+          "tags": [],
+          "docs": ""
+        },
+        {
+          "name": "RELATIVE_ORIENTATION",
+          "tags": [],
+          "docs": ""
+        }
+      ]
+    },
+    {
+      "name": "SensorDelay",
+      "slug": "sensordelay",
+      "members": [
+        {
+          "name": "FASTEST",
+          "tags": [],
+          "docs": "Get sensor data as fast as possible."
+        },
+        {
+          "name": "GAME",
+          "tags": [],
+          "docs": "Rate suitable for games."
+        },
+        {
+          "name": "UI",
+          "tags": [],
+          "docs": "Rate suitable for user interface."
+        },
+        {
+          "name": "NORMAL",
+          "tags": [],
+          "docs": "Default rate, suitable for screen orientation changes."
+        }
+      ]
+    }
+  ],
+  "typeAliases": [
+    {
+      "name": "PermissionState",
+      "slug": "permissionstate",
+      "docs": "",
+      "types": [
+        {
+          "text": "'prompt'",
+          "complexTypes": []
+        },
+        {
+          "text": "'prompt-with-rationale'",
+          "complexTypes": []
+        },
+        {
+          "text": "'granted'",
+          "complexTypes": []
+        },
+        {
+          "text": "'denied'",
+          "complexTypes": []
+        }
+      ]
+    },
+    {
+      "name": "SensorEvent",
+      "slug": "sensorevent",
+      "docs": "",
+      "types": [
+        {
+          "text": "keyof typeof SensorType",
+          "complexTypes": []
+        }
+      ]
+    }
+  ],
+  "pluginConfigs": []
+}

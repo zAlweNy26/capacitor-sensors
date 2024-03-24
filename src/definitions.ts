@@ -18,17 +18,14 @@ export enum SensorDelay {
    * Get sensor data as fast as possible.
    */
   FASTEST,
-
   /**
    * Rate suitable for games.
    */
   GAME,
-
   /**
    * Rate suitable for user interface.
    */
   UI,
-
   /**
    * Default rate, suitable for screen orientation changes.
    */
@@ -64,10 +61,22 @@ export enum SensorType {
   RELATIVE_ORIENTATION,
 }
 
+/**
+ * Represents the event names for sensor data.
+ */
 export type SensorEvent = keyof typeof SensorType;
 
+/**
+ * Represents the options for a sensor.
+ */
 export interface SensorOptions {
+  /**
+   * The type of sensor to use.
+   */
   type: SensorType;
+  /**
+   * The delay between sensor readings.
+   */
   delay?: SensorDelay;
 }
 
@@ -144,7 +153,6 @@ export interface SensorsPlugin {
    * @returns A Promise that resolves to the sensor data, or undefined if initialization failed.
    */
   init(options: SensorOptions): Promise<SensorData | undefined>;
-
   /**
    * Gets a list of available sensors.
    * @returns A Promise that resolves to an object containing the available sensors.
@@ -152,28 +160,24 @@ export interface SensorsPlugin {
   getAvailableSensors(): Promise<{
     sensors: SensorType[];
   }>;
-
   /**
    * Requests permission to use the given sensor.
    * @param sensor - The sensor to request permission for.
    * @returns A Promise that resolves to the permission status.
    */
   requestPermissions(sensor: SensorData): Promise<WebPermissionStatus>;
-
   /**
    * Starts the given sensor.
    * @param sensor - The sensor to start.
    * @returns A Promise that resolves when the sensor has started.
    */
   start(sensor: SensorData): Promise<void>;
-
   /**
    * Stops the given sensor.
    * @param sensor - The sensor to stop.
    * @returns A Promise that resolves when the sensor has stopped.
    */
   stop(sensor: SensorData): Promise<void>;
-
   /**
    * Adds a listener for the given sensor event.
    * @param eventName - The name of the event to listen for.
@@ -181,7 +185,6 @@ export interface SensorsPlugin {
    * @returns A Promise that resolves to a handle for the listener.
    */
   addListener(eventName: SensorEvent, listenerFunc: (event: SensorResult) => void): Promise<PluginListenerHandle>;
-
   /**
    * Removes all listeners for the sensor plugin.
    * @returns A Promise that resolves when all listeners have been removed.

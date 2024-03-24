@@ -15,7 +15,6 @@ npx cap sync
 
 ## Todos
 
-- [x] Improve documentation, add JSDoc strings
 - [ ] Add support for iOS
 
 ## Supported methods
