@@ -57,9 +57,21 @@ export declare enum SensorType {
     ABSOLUTE_ORIENTATION = 21,
     RELATIVE_ORIENTATION = 22
 }
+/**
+ * Represents the event names for sensor data.
+ */
 export type SensorEvent = keyof typeof SensorType;
+/**
+ * Represents the options for a sensor.
+ */
 export interface SensorOptions {
+    /**
+     * The type of sensor to use.
+     */
     type: SensorType;
+    /**
+     * The delay between sensor readings.
+     */
     delay?: SensorDelay;
 }
 /**
