@@ -2,7 +2,7 @@
 
 Get access to every sensor present in the device!
 
-Supported Android version: `22+`\
+Supported Android version: `23+`\
 Supported iOS version: `Not supported`\
 Supported Browsers: `Chromium-based`
 
