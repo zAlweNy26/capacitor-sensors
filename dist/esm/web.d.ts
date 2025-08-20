@@ -1,6 +1,6 @@
 import { WebPlugin } from '@capacitor/core';
-import type { SensorsPlugin, SensorOptions, WebPermissionStatus } from './definitions';
-import { SensorDelay, SensorType, SensorData } from './definitions';
+import type { SensorsPlugin, SensorOptions, WebPermissionStatus, SensorData } from './definitions';
+import { SensorDelay, SensorType } from './definitions';
 declare class WebSensor implements SensorData {
     type: SensorType;
     notify: (eventName: string, data: any) => void;

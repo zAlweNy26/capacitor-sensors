@@ -1,7 +1,7 @@
 import { WebPlugin } from '@capacitor/core';
 
-import type { SensorsPlugin, SensorOptions, WebPermissionStatus } from './definitions';
-import { SensorDelay, SensorType, SensorResult, SensorData } from './definitions';
+import type { SensorsPlugin, SensorOptions, WebPermissionStatus, SensorResult, SensorData } from './definitions';
+import { SensorDelay, SensorType } from './definitions';
 
 const webSupportedSensors: Record<string, SensorType> = {
   AbsoluteOrientationSensor: SensorType.ABSOLUTE_ORIENTATION,
