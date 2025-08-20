@@ -123,6 +123,17 @@ var capacitorSensors = (function (exports, core) {
         }
     }
     class SensorsWeb extends core.WebPlugin {
+        async checkPermissions() {
+            if (typeof navigator === 'undefined' || !navigator.permissions) {
+                this.unavailable('Permissions API not available in this browser.');
+            }
+            const allPerms = [].concat(...Object.values(webNeededPerms));
+            const uniquePerms = Array.from(new Set(allPerms));
+            const permission = await Promise.all(uniquePerms.map((p) => navigator.permissions.query({ name: p })));
+            return permission.reduce((p, c) => {
+                return Object.assign(Object.assign({}, p), { [c.name]: c.state });
+            }, {});
+        }
         async requestPermissions(sensor) {
             if (typeof navigator === 'undefined' || !navigator.permissions) {
                 this.unavailable('Permissions API not available in this browser.');
