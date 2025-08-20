@@ -170,19 +170,19 @@ export interface SensorsPlugin {
    * @param sensor The sensor to request permission for.
    * @returns A Promise that resolves to the permission status.
    */
-  requestPermissions(sensor: SensorData): Promise<PermissionStatus>;
+  requestPermissions(sensor: SensorOptions): Promise<PermissionStatus>;
   /**
    * Starts the given sensor.
    * @param sensor The sensor to start.
    * @returns A Promise that resolves when the sensor has started.
    */
-  start(sensor: SensorData): Promise<void>;
+  start(sensor: SensorOptions): Promise<void>;
   /**
    * Stops the given sensor.
    * @param sensor The sensor to stop.
    * @returns A Promise that resolves when the sensor has stopped.
    */
-  stop(sensor: SensorData): Promise<void>;
+  stop(sensor: SensorOptions): Promise<void>;
   /**
    * Adds a listener for the given sensor event.
    * @param eventName The name of the event to listen for.

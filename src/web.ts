@@ -41,7 +41,7 @@ class WebSensor implements SensorData {
 
   constructor(
     public type: SensorType,
-    public notify: (eventName: string, data: any) => void,
+    public notify: (eventName: string, data: SensorResult) => void,
     public delay: SensorDelay = SensorDelay.NORMAL,
   ) {
     const windowKey = getWindowProperty(type) ?? '';
@@ -49,22 +49,38 @@ class WebSensor implements SensorData {
   }
 
   start(): void {
-    this.sensor.addEventListener('reading', () => {
-      const values: number[] = [];
-      if ('illuminance' in this.sensor) values.push(this.sensor.illuminance as number);
-      if ('quaternion' in this.sensor) values.push(...(this.sensor.quaternion as number[]));
-      if ('x' in this.sensor) values.push(this.sensor.x as number);
-      if ('y' in this.sensor) values.push(this.sensor.y as number);
-      if ('z' in this.sensor) values.push(this.sensor.z as number);
+    if (this.type == SensorType.MOTION_DETECTOR) {
+      window.addEventListener('devicemotion', (ev) => {
+        const x = ev.accelerationIncludingGravity?.x || 0;
+        const y = ev.accelerationIncludingGravity?.y || 0;
+        const z = ev.accelerationIncludingGravity?.z || 0;
 
-      const result = {
-        accuracy: -1,
-        timestamp: this.sensor.timestamp ?? -1,
-        values,
-      } satisfies SensorResult;
+        const result = {
+          accuracy: -1,
+          timestamp: ev.timeStamp,
+          values: [x, y, z],
+        } satisfies SensorResult;
 
-      this.notify(SensorType[this.type], result);
-    });
+        this.notify(SensorType[this.type], result);
+      });
+    } else {
+      this.sensor.addEventListener('reading', () => {
+        const values: number[] = [];
+        if ('illuminance' in this.sensor) values.push(this.sensor.illuminance as number);
+        if ('quaternion' in this.sensor) values.push(...(this.sensor.quaternion as number[]));
+        if ('x' in this.sensor) values.push(this.sensor.x as number);
+        if ('y' in this.sensor) values.push(this.sensor.y as number);
+        if ('z' in this.sensor) values.push(this.sensor.z as number);
+  
+        const result = {
+          accuracy: -1,
+          timestamp: this.sensor.timestamp || -1,
+          values,
+        } satisfies SensorResult;
+  
+        this.notify(SensorType[this.type], result);
+      });
+    }
     this.sensor.start();
   }
 
@@ -75,9 +91,11 @@ class WebSensor implements SensorData {
 }
 
 export class SensorsWeb extends WebPlugin implements SensorsPlugin {
+  private sensors: WebSensor[] = [];
+
   async checkPermissions(): Promise<PermissionStatus> {
     if (typeof navigator === 'undefined' || !navigator.permissions) {
-      this.unavailable('Permissions API not available in this browser.');
+      throw this.unavailable('Permissions API not available in this browser.');
     }
     const allPerms = ([] as (keyof PermissionStatus)[]).concat(...Object.values(webNeededPerms));
     const uniquePerms = Array.from(new Set(allPerms));
@@ -92,9 +110,9 @@ export class SensorsWeb extends WebPlugin implements SensorsPlugin {
     }, {} as PermissionStatus);
   }
 
-  async requestPermissions(sensor: SensorData): Promise<PermissionStatus> {
+  async requestPermissions(sensor: SensorOptions): Promise<PermissionStatus> {
     if (typeof navigator === 'undefined' || !navigator.permissions) {
-      this.unavailable('Permissions API not available in this browser.');
+      throw this.unavailable('Permissions API not available in this browser.');
     }
     const permission = await Promise.all(
       webNeededPerms[sensor.type].map((p) => navigator.permissions.query({ name: p as PermissionName })),
@@ -107,29 +125,25 @@ export class SensorsWeb extends WebPlugin implements SensorsPlugin {
     }, {} as PermissionStatus);
   }
 
-  async start(sensor: WebSensor): Promise<void> {
-    if (sensor.type == SensorType.MOTION_DETECTOR) {
-      window.ondevicemotion = () => {
-        this.notifyListeners(SensorType[sensor.type], [1]);
-      };
-    } else sensor.start();
+  async start(options: SensorOptions): Promise<void> {
+    const sensor = this.sensors.find(s => s.type === options.type);
+    if (!sensor) throw this.unavailable(`Sensor of type ${options.type} not initialized.`);
+    sensor.start();
   }
 
-  async stop(sensor: WebSensor): Promise<void> {
+  async stop(options: SensorOptions): Promise<void> {
+    const sensor = this.sensors.find(s => s.type === options.type);
+    if (!sensor) throw this.unavailable(`Sensor of type ${options.type} not initialized.`);
     sensor.stop();
   }
 
   async init({ type, delay }: SensorOptions): Promise<SensorData | undefined> {
     if (this.isPresent(type)) {
-      if (type == SensorType.MOTION_DETECTOR) {
-        const sensor = { type } satisfies SensorData;
-        return sensor;
-      } else {
-        const sensor = new WebSensor(type, this.notifyListeners, delay);
-        return sensor;
-      }
+      const sensor = new WebSensor(type, this.notifyListeners, delay);
+      this.sensors.push(sensor);
+      return { type, delay };
     }
-    return undefined;
+    return;
   }
 
   async getAvailableSensors(): Promise<{ sensors: SensorType[] }> {
