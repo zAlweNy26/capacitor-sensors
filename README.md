@@ -33,10 +33,10 @@ The following example demonstrates how to use the Sensors plugin to access the d
 import { Sensors } from '@danyalwe/capacitor-sensors';
 
 // Initialize the specific sensor and obtain 
-const sensor = await Sensors.init({ type: 'ACCELEROMETER' });
+const sensor = await Sensors.init({ type: SensorType.ACCELEROMETER });
 
 // Start the sensor to begin receiving data
-await Sensors.start({ type: 'ACCELEROMETER' });
+await Sensors.start({ type: SensorType.ACCELEROMETER });
 
 // Add a listener to receive accelerometer data
 Sensors.addListener('ACCELEROMETER', (data) => {
