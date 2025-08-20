@@ -71,13 +71,13 @@ class WebSensor implements SensorData {
         if ('x' in this.sensor) values.push(this.sensor.x as number);
         if ('y' in this.sensor) values.push(this.sensor.y as number);
         if ('z' in this.sensor) values.push(this.sensor.z as number);
-  
+
         const result = {
           accuracy: -1,
           timestamp: this.sensor.timestamp || -1,
           values,
         } satisfies SensorResult;
-  
+
         this.notify(SensorType[this.type], result);
       });
     }
@@ -126,13 +126,13 @@ export class SensorsWeb extends WebPlugin implements SensorsPlugin {
   }
 
   async start(options: SensorOptions): Promise<void> {
-    const sensor = this.sensors.find(s => s.type === options.type);
+    const sensor = this.sensors.find((s) => s.type === options.type);
     if (!sensor) throw this.unavailable(`Sensor of type ${options.type} not initialized.`);
     sensor.start();
   }
 
   async stop(options: SensorOptions): Promise<void> {
-    const sensor = this.sensors.find(s => s.type === options.type);
+    const sensor = this.sensors.find((s) => s.type === options.type);
     if (!sensor) throw this.unavailable(`Sensor of type ${options.type} not initialized.`);
     sensor.stop();
   }

@@ -1,24 +1,15 @@
 import { WebPlugin } from '@capacitor/core';
 import type { SensorsPlugin, SensorOptions, PermissionStatus, SensorData } from './definitions';
-import { SensorDelay, SensorType } from './definitions';
-declare class WebSensor implements SensorData {
-    type: SensorType;
-    notify: (eventName: string, data: any) => void;
-    delay: SensorDelay;
-    private sensor;
-    constructor(type: SensorType, notify: (eventName: string, data: any) => void, delay?: SensorDelay);
-    start(): void;
-    stop(): void;
-}
+import { SensorType } from './definitions';
 export declare class SensorsWeb extends WebPlugin implements SensorsPlugin {
+    private sensors;
     checkPermissions(): Promise<PermissionStatus>;
-    requestPermissions(sensor: SensorData): Promise<PermissionStatus>;
-    start(sensor: WebSensor): Promise<void>;
-    stop(sensor: WebSensor): Promise<void>;
+    requestPermissions(sensor: SensorOptions): Promise<PermissionStatus>;
+    start(options: SensorOptions): Promise<void>;
+    stop(options: SensorOptions): Promise<void>;
     init({ type, delay }: SensorOptions): Promise<SensorData | undefined>;
     getAvailableSensors(): Promise<{
         sensors: SensorType[];
     }>;
     private isPresent;
 }
-export {};
