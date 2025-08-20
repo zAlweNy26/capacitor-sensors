@@ -1,5 +1,13 @@
 # @danyalwe/capacitor-sensors
 
+## 0.0.4
+
+### Patch Changes
+
+- b5ac32d: Update to Capacitor v7
+  Switch to pnpm
+  Add `checkPermissions` method
+
 ## 0.0.3
 
 ### Patch Changes
