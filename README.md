@@ -25,6 +25,25 @@ If you want to use the **`STEP_COUNTER`** or **`STEP_DETECTOR`** sensor, you nee
 <uses-permission android:name="android.permission.ACTIVITY_RECOGNITION" />
 ```
 
+## Example
+
+The following example demonstrates how to use the Sensors plugin to access the device's accelerometer:
+
+```ts
+import { Sensors } from '@danyalwe/capacitor-sensors';
+
+// Initialize the specific sensor and obtain 
+const sensor = await Sensors.init({ type: 'ACCELEROMETER' });
+
+// Start the sensor to begin receiving data
+await Sensors.start({ type: 'ACCELEROMETER' });
+
+// Add a listener to receive accelerometer data
+Sensors.addListener('ACCELEROMETER', (data) => {
+  console.log('Accelerometer data:', data);
+});
+```
+
 ## Todos
 
 - [ ] Add support for iOS
