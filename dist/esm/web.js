@@ -29,15 +29,17 @@ const webNeededPerms = {
 };
 const getWindowProperty = (type) => Object.keys(webSupportedSensors).find((key) => webSupportedSensors[key] === type);
 class WebSensor {
-    constructor(type, notify, delay = SensorDelay.NORMAL) {
+    constructor(notify, type, delay = SensorDelay.NORMAL) {
         var _a;
-        this.type = type;
         this.notify = notify;
+        this.type = type;
         this.delay = delay;
+        this.abortController = new AbortController();
         const windowKey = (_a = getWindowProperty(type)) !== null && _a !== void 0 ? _a : '';
         this.sensor = new window[windowKey]({ frequency: webSensorFrequency[delay] });
     }
     start() {
+        this.abortController = new AbortController();
         if (this.type == SensorType.MOTION_DETECTOR) {
             window.addEventListener('devicemotion', (ev) => {
                 var _a, _b, _c;
@@ -50,7 +52,7 @@ class WebSensor {
                     values: [x, y, z],
                 };
                 this.notify(SensorType[this.type], result);
-            });
+            }, { signal: this.abortController.signal });
         }
         else {
             this.sensor.addEventListener('reading', () => {
@@ -77,6 +79,7 @@ class WebSensor {
     }
     stop() {
         this.sensor.removeEventListener('reading', null);
+        this.abortController.abort('stop');
         this.sensor.stop();
     }
 }
@@ -119,7 +122,7 @@ export class SensorsWeb extends WebPlugin {
     }
     async init({ type, delay }) {
         if (this.isPresent(type)) {
-            const sensor = new WebSensor(type, this.notifyListeners, delay);
+            const sensor = new WebSensor(this.notifyListeners, type, delay);
             this.sensors.push(sensor);
             return { type, delay };
         }

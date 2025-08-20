@@ -52,19 +52,23 @@ class WebSensor implements SensorData {
   start(): void {
     this.abortController = new AbortController();
     if (this.type == SensorType.MOTION_DETECTOR) {
-      window.addEventListener('devicemotion', (ev) => {
-        const x = ev.accelerationIncludingGravity?.x || 0;
-        const y = ev.accelerationIncludingGravity?.y || 0;
-        const z = ev.accelerationIncludingGravity?.z || 0;
+      window.addEventListener(
+        'devicemotion',
+        (ev) => {
+          const x = ev.accelerationIncludingGravity?.x || 0;
+          const y = ev.accelerationIncludingGravity?.y || 0;
+          const z = ev.accelerationIncludingGravity?.z || 0;
 
-        const result = {
-          accuracy: -1,
-          timestamp: ev.timeStamp,
-          values: [x, y, z],
-        } satisfies SensorResult;
+          const result = {
+            accuracy: -1,
+            timestamp: ev.timeStamp,
+            values: [x, y, z],
+          } satisfies SensorResult;
 
-        this.notify(SensorType[this.type], result);
-      }, { signal: this.abortController.signal });
+          this.notify(SensorType[this.type], result);
+        },
+        { signal: this.abortController.signal },
+      );
     } else {
       this.sensor.addEventListener('reading', () => {
         const values: number[] = [];
