@@ -1,5 +1,12 @@
 # @danyalwe/capacitor-sensors
 
+## 0.0.3
+
+### Patch Changes
+
+- 1e8df77: Improve documentation
+  Update to Capacitor v6
+
 ## 0.0.2
 
 ### Patch Changes
