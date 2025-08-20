@@ -3,7 +3,7 @@ import type { PermissionState, PluginListenerHandle } from '@capacitor/core';
 /**
  * Interface representing the permission status for various web sensors.
  */
-export interface WebPermissionStatus {
+export interface PermissionStatus {
   accelerometer: PermissionState;
   'ambient-light-sensor': PermissionState;
   gyroscope: PermissionState;
@@ -149,7 +149,7 @@ export interface SensorResult {
 export interface SensorsPlugin {
   /**
    * Initializes the sensor plugin with the given options.
-   * @param options - The options to initialize the sensor plugin with.
+   * @param options The options to initialize the sensor plugin with.
    * @returns A Promise that resolves to the sensor data, or undefined if initialization failed.
    */
   init(options: SensorOptions): Promise<SensorData | undefined>;
@@ -161,27 +161,32 @@ export interface SensorsPlugin {
     sensors: SensorType[];
   }>;
   /**
-   * Requests permission to use the given sensor.
-   * @param sensor - The sensor to request permission for.
+   * Checks the permissions for the given sensor.
    * @returns A Promise that resolves to the permission status.
    */
-  requestPermissions(sensor: SensorData): Promise<WebPermissionStatus>;
+  checkPermissions(): Promise<PermissionStatus>;
+  /**
+   * Requests permission to use the given sensor.
+   * @param sensor The sensor to request permission for.
+   * @returns A Promise that resolves to the permission status.
+   */
+  requestPermissions(sensor: SensorData): Promise<PermissionStatus>;
   /**
    * Starts the given sensor.
-   * @param sensor - The sensor to start.
+   * @param sensor The sensor to start.
    * @returns A Promise that resolves when the sensor has started.
    */
   start(sensor: SensorData): Promise<void>;
   /**
    * Stops the given sensor.
-   * @param sensor - The sensor to stop.
+   * @param sensor The sensor to stop.
    * @returns A Promise that resolves when the sensor has stopped.
    */
   stop(sensor: SensorData): Promise<void>;
   /**
    * Adds a listener for the given sensor event.
-   * @param eventName - The name of the event to listen for.
-   * @param listenerFunc - The function to call when the event is triggered.
+   * @param eventName The name of the event to listen for.
+   * @param listenerFunc The function to call when the event is triggered.
    * @returns A Promise that resolves to a handle for the listener.
    */
   addListener(eventName: SensorEvent, listenerFunc: (event: SensorResult) => void): Promise<PluginListenerHandle>;

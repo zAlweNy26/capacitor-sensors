@@ -13,6 +13,18 @@ npm install @danyalwe/capacitor-sensors
 npx cap sync
 ```
 
+If you want to use the **`HEART_BEAT`** or **`HEART_RATE`** sensor, you need to request the `BODY_SENSORS` permission in your app:
+
+```xml
+<uses-permission android:name="android.permission.BODY_SENSORS" />
+```
+
+If you want to use the **`STEP_COUNTER`** or **`STEP_DETECTOR`** sensor, you need to request the `ACTIVITY_RECOGNITION` permission in your app:
+
+```xml
+<uses-permission android:name="android.permission.ACTIVITY_RECOGNITION" />
+```
+
 ## Todos
 
 - [ ] Add support for iOS
@@ -63,6 +75,7 @@ npx cap sync
 
 * [`init(...)`](#init)
 * [`getAvailableSensors()`](#getavailablesensors)
+* [`checkPermissions(...)`](#checkpermissions)
 * [`requestPermissions(...)`](#requestpermissions)
 * [`start(...)`](#start)
 * [`stop(...)`](#stop)
@@ -103,17 +116,30 @@ getAvailableSensors() => Promise<{ sensors: SensorType[]; }>
 --------------------
 
 
+### checkPermissions()
+
+```typescript
+checkPermissions() => Promise<PermissionStatus>
+```
+
+Checks the permissions for the given sensor.
+
+**Returns:** <code>Promise&lt;<a href="#permissionstatus">PermissionStatus</a>&gt;</code>
+
+--------------------
+
+
 ### requestPermissions(...)
 
 ```typescript
-requestPermissions(sensor: SensorData) => Promise<WebPermissionStatus>
+requestPermissions(sensor: SensorData) => Promise<PermissionStatus>
 ```
 
 | Param        | Type                                              |
 | ------------ | ------------------------------------------------- |
 | **`sensor`** | <code><a href="#sensordata">SensorData</a></code> |
 
-**Returns:** <code>Promise&lt;<a href="#webpermissionstatus">WebPermissionStatus</a>&gt;</code>
+**Returns:** <code>Promise&lt;<a href="#permissionstatus">PermissionStatus</a>&gt;</code>
 
 --------------------
 
@@ -201,7 +227,7 @@ removeAllListeners() => Promise<void>
 | **`delay`** | <code><a href="#sensordelay">SensorDelay</a></code> |
 
 
-#### WebPermissionStatus
+#### PermissionStatus
 
 | Prop                         | Type                                                        |
 | ---------------------------- | ----------------------------------------------------------- |

@@ -1,5 +1,6 @@
 package com.alwe.plugins.sensors
 
+import android.Manifest
 import android.content.Context
 import android.hardware.Sensor
 import android.hardware.SensorManager
@@ -17,7 +18,10 @@ import com.getcapacitor.annotation.Permission
     permissions = [
         Permission(
             alias = "sensors",
-            strings = arrayOf()
+            strings = [
+                Manifest.permission.BODY_SENSORS,
+                Manifest.permission.ACTIVITY_RECOGNITION
+            ]
         )
     ]
 )
@@ -47,14 +51,18 @@ class SensorsPlugin : Plugin() {
 
         if (newSensor == null) {
             newSensor = if (type == SensorType.ABSOLUTE_ORIENTATION || type == SensorType.RELATIVE_ORIENTATION) {
-                Orientation(::notifyListeners, type, delay)
+                Orientation(this, type, delay)
             } else {
-                SensorInstance(::notifyListeners, type, delay)
+                SensorInstance(this, type, delay)
             }
             this.sensors.add(newSensor)
         }
 
         call.resolve(newSensor.init())
+    }
+
+    fun notify(eventName: String, data: JSObject, retainUntilConsumed: Boolean): Unit {
+        return notifyListeners(eventName, data, retainUntilConsumed)
     }
 
     private fun isPresent(sensor: SensorType): Boolean {
@@ -72,13 +80,41 @@ class SensorsPlugin : Plugin() {
 
     @PluginMethod
     fun start(call: PluginCall) {
-        val sensor = call.data.getInt("type").toEnum<SensorType>()!!
-        this.sensors.find { it.type == sensor }?.start()
+        val sensor = call.data.getInt("type").toEnum<SensorType>()
+        
+        if (sensor == null) {
+            call.reject("Invalid sensor type")
+            return
+        }
+        
+        val sensorInstance = this.sensors.find { it.type == sensor }
+        
+        if (sensorInstance == null) {
+            call.reject("Sensor not initialized. Call init() first.")
+            return
+        }
+        
+        sensorInstance.start()
+        call.resolve()
     }
 
     @PluginMethod
     fun stop(call: PluginCall) {
-        val sensor = call.data.getInt("type").toEnum<SensorType>()!!
-        this.sensors.find { it.type == sensor }?.stop()
+        val sensor = call.data.getInt("type").toEnum<SensorType>()
+        
+        if (sensor == null) {
+            call.reject("Invalid sensor type")
+            return
+        }
+        
+        val sensorInstance = this.sensors.find { it.type == sensor }
+        
+        if (sensorInstance == null) {
+            call.reject("Sensor not found or not initialized")
+            return
+        }
+        
+        sensorInstance.stop()
+        call.resolve()
     }
 }

@@ -7,7 +7,7 @@ import com.getcapacitor.JSArray
 import com.getcapacitor.JSObject
 
 class SensorInstance(
-    override val notify: (eventName: String, data: JSObject, retainUntilConsumed: Boolean) -> Unit,
+    override val plugin: SensorsPlugin,
     override val type: SensorType,
     override val delay: SensorDelay = SensorDelay.NORMAL
 ) : PluginSensor {
@@ -51,7 +51,7 @@ class SensorInstance(
             content.put("timestamp", event.timestamp)
             content.put("values", JSArray(event.values))
 
-            notify(this.type.name, content, true)
+            this.plugin.notify(this.type.name, content, true)
         }
     }
 

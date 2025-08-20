@@ -5,7 +5,7 @@ import android.hardware.SensorEventListener
 import com.getcapacitor.JSObject
 
 interface PluginSensor : SensorEventListener {
-    val notify: (eventName: String, data: JSObject, retainUntilConsumed: Boolean) -> Unit
+    val plugin: SensorsPlugin
     val type: SensorType
     val delay: SensorDelay
 

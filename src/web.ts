@@ -1,6 +1,6 @@
 import { WebPlugin } from '@capacitor/core';
 
-import type { SensorsPlugin, SensorOptions, WebPermissionStatus, SensorResult, SensorData } from './definitions';
+import type { SensorsPlugin, SensorOptions, PermissionStatus, SensorResult, SensorData } from './definitions';
 import { SensorDelay, SensorType } from './definitions';
 
 const webSupportedSensors: Record<string, SensorType> = {
@@ -22,7 +22,7 @@ const webSensorFrequency: Record<SensorDelay, number> = {
   [SensorDelay.NORMAL]: 60,
 };
 
-const webNeededPerms: Record<number, (keyof WebPermissionStatus)[]> = {
+const webNeededPerms: Record<number, (keyof PermissionStatus)[]> = {
   [SensorType.ABSOLUTE_ORIENTATION]: ['accelerometer', 'gyroscope', 'magnetometer'],
   [SensorType.ACCELEROMETER]: ['accelerometer'],
   [SensorType.AMBIENT_LIGHT]: ['ambient-light-sensor'],
@@ -75,7 +75,24 @@ class WebSensor implements SensorData {
 }
 
 export class SensorsWeb extends WebPlugin implements SensorsPlugin {
-  async requestPermissions(sensor: SensorData): Promise<WebPermissionStatus> {
+  async checkPermissions(): Promise<PermissionStatus> {
+    if (typeof navigator === 'undefined' || !navigator.permissions) {
+      this.unavailable('Permissions API not available in this browser.');
+    }
+    const allPerms = ([] as (keyof PermissionStatus)[]).concat(...Object.values(webNeededPerms));
+    const uniquePerms = Array.from(new Set(allPerms));
+    const permission = await Promise.all(
+      uniquePerms.map((p) => navigator.permissions.query({ name: p as PermissionName })),
+    );
+    return permission.reduce((p, c) => {
+      return {
+        ...p,
+        [c.name]: c.state,
+      };
+    }, {} as PermissionStatus);
+  }
+
+  async requestPermissions(sensor: SensorData): Promise<PermissionStatus> {
     if (typeof navigator === 'undefined' || !navigator.permissions) {
       this.unavailable('Permissions API not available in this browser.');
     }
@@ -87,7 +104,7 @@ export class SensorsWeb extends WebPlugin implements SensorsPlugin {
         ...p,
         [c.name]: c.state,
       };
-    }, {} as WebPermissionStatus);
+    }, {} as PermissionStatus);
   }
 
   async start(sensor: WebSensor): Promise<void> {
