@@ -21,7 +21,7 @@ importers:
         specifier: ^7.0.0
         version: 7.4.2(@capacitor/core@7.4.2)
       '@changesets/cli':
-        specifier: ^2.26.2
+        specifier: ^2.29.6
         version: 2.29.6(@types/node@24.3.0)
       '@ionic/eslint-config':
         specifier: ^0.4.0
@@ -33,7 +33,7 @@ importers:
         specifier: ^2.0.0
         version: 2.0.0
       '@types/w3c-generic-sensor':
-        specifier: ^1.0.6
+        specifier: ^1.0.10
         version: 1.0.10
       '@typescript-eslint/eslint-plugin':
         specifier: ^5.62.0
@@ -42,10 +42,10 @@ importers:
         specifier: ^8.57.0
         version: 8.57.1
       prettier:
-        specifier: ^3.4.2
+        specifier: ^3.6.2
         version: 3.6.2
       prettier-plugin-java:
-        specifier: ^2.6.6
+        specifier: ^2.7.4
         version: 2.7.4(prettier@3.6.2)
       prettier-plugin-kotlin:
         specifier: ^2.1.0
