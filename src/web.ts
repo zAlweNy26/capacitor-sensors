@@ -38,10 +38,11 @@ const getWindowProperty = (type: SensorType) =>
 
 class WebSensor implements SensorData {
   private sensor!: Sensor;
+  private abortController: AbortController = new AbortController();
 
   constructor(
-    public type: SensorType,
     public notify: (eventName: string, data: SensorResult) => void,
+    public type: SensorType,
     public delay: SensorDelay = SensorDelay.NORMAL,
   ) {
     const windowKey = getWindowProperty(type) ?? '';
@@ -49,6 +50,7 @@ class WebSensor implements SensorData {
   }
 
   start(): void {
+    this.abortController = new AbortController();
     if (this.type == SensorType.MOTION_DETECTOR) {
       window.addEventListener('devicemotion', (ev) => {
         const x = ev.accelerationIncludingGravity?.x || 0;
@@ -62,7 +64,7 @@ class WebSensor implements SensorData {
         } satisfies SensorResult;
 
         this.notify(SensorType[this.type], result);
-      });
+      }, { signal: this.abortController.signal });
     } else {
       this.sensor.addEventListener('reading', () => {
         const values: number[] = [];
@@ -86,6 +88,7 @@ class WebSensor implements SensorData {
 
   stop(): void {
     this.sensor.removeEventListener('reading', null);
+    this.abortController.abort('stop');
     this.sensor.stop();
   }
 }
@@ -139,7 +142,7 @@ export class SensorsWeb extends WebPlugin implements SensorsPlugin {
 
   async init({ type, delay }: SensorOptions): Promise<SensorData | undefined> {
     if (this.isPresent(type)) {
-      const sensor = new WebSensor(type, this.notifyListeners, delay);
+      const sensor = new WebSensor(this.notifyListeners, type, delay);
       this.sensors.push(sensor);
       return { type, delay };
     }
