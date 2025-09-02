@@ -1,21 +1,21 @@
-import type { PermissionState, PluginListenerHandle } from '@capacitor/core';
+import type { PermissionState, PluginListenerHandle } from '@capacitor/core'
 
 /**
  * Interface representing the permission status for various web sensors.
  */
 export interface PermissionStatus {
-  accelerometer: PermissionState;
-  'ambient-light-sensor': PermissionState;
-  gyroscope: PermissionState;
-  magnetometer: PermissionState;
+  'accelerometer': PermissionState
+  'ambient-light-sensor': PermissionState
+  'gyroscope': PermissionState
+  'magnetometer': PermissionState
 }
 
 /**
  * Array of possible sensor delays.
  */
-export const SensorDelays = ['FASTEST', 'GAME', 'UI', 'NORMAL'] as const;
+export const SensorDelays = ['FASTEST', 'GAME', 'UI', 'NORMAL'] as const
 
-export type SensorDelay = (typeof SensorDelays)[number];
+export type SensorDelay = (typeof SensorDelays)[number]
 
 /**
  * Array representing the types of sensors available in the application.
@@ -44,9 +44,9 @@ export const SensorTypes = [
   'STEP_DETECTOR',
   'ABSOLUTE_ORIENTATION',
   'RELATIVE_ORIENTATION',
-] as const;
+] as const
 
-export type SensorType = (typeof SensorTypes)[number];
+export type SensorType = (typeof SensorTypes)[number]
 
 /**
  * Represents the options for a sensor.
@@ -55,11 +55,11 @@ export interface SensorOptions {
   /**
    * The type of sensor to use.
    */
-  type: SensorType;
+  type: SensorType
   /**
    * The delay between sensor readings.
    */
-  delay?: SensorDelay;
+  delay?: SensorDelay
 }
 
 /**
@@ -69,46 +69,46 @@ export interface SensorInfos {
   /**
    * The name of the sensor.
    */
-  name: string;
+  name: string
   /**
    * The vendor of the sensor.
    */
-  vendor: string;
+  vendor: string
   /**
    * The version of the sensor.
    */
-  version: number;
+  version: number
   /**
    * The type of the sensor.
    */
-  type: number;
+  type: number
   /**
    * The maximum range of the sensor in sensor units.
    */
-  maxRange: number;
+  maxRange: number
   /**
    * The resolution of the sensor in sensor units.
    */
-  resolution: number;
+  resolution: number
   /**
    * The power consumption of the sensor in milliamperes.
    */
-  power: number;
+  power: number
   /**
    * The minimum delay between sensor readings in microseconds.
    */
-  minDelay: number;
+  minDelay: number
   /**
    * The maximum delay between sensor readings in microseconds.
    */
-  maxDelay: number;
+  maxDelay: number
 }
 
 /**
  * Represents the data returned by a sensor, including any additional information about the sensor.
  */
 export interface SensorData extends Required<SensorOptions> {
-  infos?: SensorInfos;
+  infos?: SensorInfos
 }
 
 /**
@@ -118,15 +118,15 @@ export interface SensorResult {
   /**
    * The accuracy of the sensor reading, if available.
    */
-  accuracy?: number;
+  accuracy?: number
   /**
    * The timestamp of the sensor reading, if available.
    */
-  timestamp?: number;
+  timestamp?: number
   /**
    * The values obtained from the sensor reading.
    */
-  values: number[];
+  values: number[]
 }
 
 /**
@@ -138,47 +138,47 @@ export interface SensorsPlugin {
    * @param options The options to initialize the sensor plugin with.
    * @returns A Promise that resolves to the sensor data, or undefined if initialization failed.
    */
-  init: (options: SensorOptions) => Promise<SensorData | undefined>;
+  init: (options: SensorOptions) => Promise<SensorData | undefined>
   /**
    * Gets a list of available sensors.
    * @returns A Promise that resolves to an object containing the available sensors.
    */
   getAvailableSensors: () => Promise<{
-    sensors: SensorType[];
-  }>;
+    sensors: SensorType[]
+  }>
   /**
    * Checks the permissions for the given sensor.
    * @returns A Promise that resolves to the permission status.
    */
-  checkPermissions: () => Promise<PermissionStatus>;
+  checkPermissions: () => Promise<PermissionStatus>
   /**
    * Requests permission to use the given sensor.
    * @param sensor The sensor to request permission for.
    * @returns A Promise that resolves to the permission status.
    */
-  requestPermissions: (sensor: SensorOptions) => Promise<PermissionStatus>;
+  requestPermissions: (sensor: SensorOptions) => Promise<PermissionStatus>
   /**
    * Starts the given sensor.
    * @param sensor The sensor to start.
    * @returns A Promise that resolves when the sensor has started.
    */
-  start: (options: { type: SensorType }) => Promise<void>;
+  start: (options: { type: SensorType }) => Promise<void>
   /**
    * Stops the given sensor.
    * @param sensor The sensor to stop.
    * @returns A Promise that resolves when the sensor has stopped.
    */
-  stop: (options: { type: SensorType }) => Promise<void>;
+  stop: (options: { type: SensorType }) => Promise<void>
   /**
    * Adds a listener for the given sensor event.
    * @param eventName The name of the event to listen for.
    * @param listenerFunc The function to call when the event is triggered.
    * @returns A Promise that resolves to a handle for the listener.
    */
-  addListener: (eventName: SensorType, listenerFunc: (event: SensorResult) => void) => Promise<PluginListenerHandle>;
+  addListener: (eventName: SensorType, listenerFunc: (event: SensorResult) => void) => Promise<PluginListenerHandle>
   /**
    * Removes all listeners for the sensor plugin.
    * @returns A Promise that resolves when all listeners have been removed.
    */
-  removeAllListeners: () => Promise<void>;
+  removeAllListeners: () => Promise<void>
 }

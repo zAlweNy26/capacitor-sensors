@@ -1,15 +1,7 @@
-import type {
-  PermissionStatus,
-  SensorData,
-  SensorDelay,
-  SensorOptions,
-  SensorResult,
-  SensorsPlugin,
-  SensorType,
-} from './definitions';
+import type { PermissionStatus, SensorData, SensorDelay, SensorOptions, SensorResult, SensorsPlugin, SensorType } from './definitions'
 
-import { WebPlugin } from '@capacitor/core';
-import { SensorTypes } from './definitions';
+import { WebPlugin } from '@capacitor/core'
+import { SensorTypes } from './definitions'
 
 const webSupportedSensors = {
   AbsoluteOrientationSensor: 'ABSOLUTE_ORIENTATION',
@@ -21,14 +13,14 @@ const webSupportedSensors = {
   Magnetometer: 'MAGNETOMETER',
   RelativeOrientationSensor: 'RELATIVE_ORIENTATION',
   ondevicemotion: 'MOTION_DETECTOR',
-} satisfies Record<string, SensorType>;
+} satisfies Record<string, SensorType>
 
 const webSensorFrequency: Record<SensorDelay, number> = {
   FASTEST: 0,
   GAME: 15,
   UI: 30,
   NORMAL: 60,
-};
+}
 
 const webNeededPerms = {
   ABSOLUTE_ORIENTATION: ['accelerometer', 'gyroscope', 'magnetometer'],
@@ -54,153 +46,152 @@ const webNeededPerms = {
   STATIONARY_DETECTOR: [],
   STEP_COUNTER: [],
   STEP_DETECTOR: [],
-} satisfies Record<SensorType, (keyof PermissionStatus)[]>;
+} satisfies Record<SensorType, (keyof PermissionStatus)[]>
 
 function getWindowProperty(type: SensorType) {
   return Object.entries(webSupportedSensors).find(
     ([, value]) => value === type,
-  )?.[0] as keyof typeof webSupportedSensors;
+  )?.[0] as keyof typeof webSupportedSensors
 }
 
 class WebSensor implements SensorData {
-  private sensor: Sensor | undefined;
-  private abortController: AbortController = new AbortController();
+  private sensor: Sensor | undefined
+  private abortController: AbortController = new AbortController()
 
   constructor(
     public notify: (eventName: SensorType, data: SensorResult) => void,
     public type: SensorType,
     public delay: SensorDelay = 'NORMAL',
   ) {
-    const windowKey = getWindowProperty(type);
-    if (!windowKey || windowKey === 'ondevicemotion') return;
-    this.sensor = new (window as any)[windowKey]({ frequency: webSensorFrequency[delay] });
+    const windowKey = getWindowProperty(type)
+    if (!windowKey || windowKey === 'ondevicemotion') return
+    this.sensor = new (window as any)[windowKey]({ frequency: webSensorFrequency[delay] })
   }
 
   start(): void {
-    this.abortController = new AbortController();
+    this.abortController = new AbortController()
     if (this.type === 'MOTION_DETECTOR' || !this.sensor) {
-      window.addEventListener(
-        'devicemotion',
-        (ev) => {
-          const x = ev.accelerationIncludingGravity?.x || 0;
-          const y = ev.accelerationIncludingGravity?.y || 0;
-          const z = ev.accelerationIncludingGravity?.z || 0;
+      window.addEventListener('devicemotion', (ev) => {
+        const x = ev.accelerationIncludingGravity?.x || 0
+        const y = ev.accelerationIncludingGravity?.y || 0
+        const z = ev.accelerationIncludingGravity?.z || 0
 
-          const result = {
-            accuracy: 0,
-            timestamp: ev.timeStamp,
-            values: [x, y, z],
-          } satisfies SensorResult;
+        const result = {
+          accuracy: 0,
+          timestamp: ev.timeStamp,
+          values: [x, y, z],
+        } satisfies SensorResult
 
-          this.notify(this.type, result);
-        },
-        { signal: this.abortController.signal },
-      );
-    } else {
-      const sensor = this.sensor;
+        this.notify(this.type, result)
+      }, { signal: this.abortController.signal })
+    }
+    else {
+      const sensor = this.sensor
       this.sensor.addEventListener('reading', () => {
-        const values: number[] = [];
-        if ('illuminance' in sensor) values.push(sensor.illuminance as number);
-        if ('quaternion' in sensor) values.push(...(sensor.quaternion as number[]));
-        if ('x' in sensor) values.push(sensor.x as number);
-        if ('y' in sensor) values.push(sensor.y as number);
-        if ('z' in sensor) values.push(sensor.z as number);
+        const values: number[] = []
+        if ('illuminance' in sensor) values.push(sensor.illuminance as number)
+        if ('quaternion' in sensor) values.push(...(sensor.quaternion as number[]))
+        if ('x' in sensor) values.push(sensor.x as number)
+        if ('y' in sensor) values.push(sensor.y as number)
+        if ('z' in sensor) values.push(sensor.z as number)
 
         const result = {
           accuracy: 0,
           timestamp: sensor.timestamp || 0,
           values,
-        } satisfies SensorResult;
+        } satisfies SensorResult
 
-        this.notify(this.type, result);
-      });
-      this.sensor.start();
+        this.notify(this.type, result)
+      })
+      this.sensor.start()
     }
   }
 
   stop(): void {
-    this.sensor?.removeEventListener('reading', null);
-    this.abortController.abort('stop');
-    this.sensor?.stop();
+    this.sensor?.removeEventListener('reading', null)
+    this.abortController.abort('stop')
+    this.sensor?.stop()
   }
 }
 
 export class SensorsWeb extends WebPlugin implements SensorsPlugin {
-  private sensors: WebSensor[] = [];
+  private sensors: WebSensor[] = []
 
   private onSensorData = (eventName: SensorType, data: SensorResult): void => {
-    this.notifyListeners(eventName, data, true);
-  };
+    this.notifyListeners(eventName, data, true)
+  }
 
   async checkPermissions(): Promise<PermissionStatus> {
-    if (typeof navigator === 'undefined' || !navigator.permissions) {
-      throw this.unavailable('Permissions API not available in this browser.');
-    }
-    const allPerms = ([] as (keyof PermissionStatus)[]).concat(...Object.values(webNeededPerms));
-    const uniquePerms = Array.from(new Set(allPerms));
+    if (typeof navigator === 'undefined' || !navigator.permissions)
+      throw this.unavailable('Permissions API not available in this browser.')
+
+    const allPerms = ([] as (keyof PermissionStatus)[]).concat(...Object.values(webNeededPerms))
+    const uniquePerms = Array.from(new Set(allPerms))
     const permission = await Promise.all(
-      uniquePerms.map((p) => navigator.permissions.query({ name: p as PermissionName })),
-    );
+      uniquePerms.map(p => navigator.permissions.query({ name: p as PermissionName })),
+    )
+
     return permission.reduce((p, c) => {
       return {
         ...p,
         [c.name]: c.state,
-      };
-    }, {} as PermissionStatus);
+      }
+    }, {} as PermissionStatus)
   }
 
   async requestPermissions(options: { type: SensorType }): Promise<PermissionStatus> {
-    if (typeof navigator === 'undefined' || !navigator.permissions) {
-      throw this.unavailable('Permissions API not available in this browser.');
-    }
+    if (typeof navigator === 'undefined' || !navigator.permissions)
+      throw this.unavailable('Permissions API not available in this browser.')
+
     const permission = await Promise.all(
-      webNeededPerms[options.type].map((p) => navigator.permissions.query({ name: p as PermissionName })),
-    );
+      webNeededPerms[options.type].map(p => navigator.permissions.query({ name: p as PermissionName })),
+    )
+
     return permission.reduce((p, c) => {
       return {
         ...p,
         [c.name]: c.state,
-      };
-    }, {} as PermissionStatus);
+      }
+    }, {} as PermissionStatus)
   }
 
   async start(options: { type: SensorType }): Promise<void> {
-    const sensor = this.sensors.find((s) => s.type === options.type);
-    if (!sensor) throw this.unavailable(`Sensor of type ${options.type} not initialized.`);
-    sensor.start();
+    const sensor = this.sensors.find(s => s.type === options.type)
+    if (!sensor) throw this.unavailable(`Sensor of type ${options.type} not initialized.`)
+    sensor.start()
   }
 
   async stop(options: { type: SensorType }): Promise<void> {
-    const sensor = this.sensors.find((s) => s.type === options.type);
-    if (!sensor) throw this.unavailable(`Sensor of type ${options.type} not initialized.`);
-    sensor.stop();
+    const sensor = this.sensors.find(s => s.type === options.type)
+    if (!sensor) throw this.unavailable(`Sensor of type ${options.type} not initialized.`)
+    sensor.stop()
   }
 
   async init(options: SensorOptions): Promise<SensorData | undefined> {
-    const { type, delay = 'NORMAL' } = options;
+    const { type, delay = 'NORMAL' } = options
     if (this.isPresent(type)) {
-      const sensor = new WebSensor(this.onSensorData, type, delay);
-      this.sensors.push(sensor);
-      return { type, delay };
+      const sensor = new WebSensor(this.onSensorData, type, delay)
+      this.sensors.push(sensor)
+      return { type, delay }
     }
-    return { type, delay };
+    return { type, delay }
   }
 
   async getAvailableSensors(): Promise<{ sensors: SensorType[] }> {
     const sensorsList = Object.entries(webSupportedSensors)
       .filter(([sensorName]) => sensorName in window)
-      .map(([, sensorType]) => sensorType);
+      .map(([, sensorType]) => sensorType)
     return {
       sensors: sensorsList,
-    };
+    }
   }
 
   private isPresent(type: SensorType) {
     if (SensorTypes.includes(type)) {
-      const windowKey = getWindowProperty(type);
-      if (windowKey) return windowKey in window;
-      return false;
+      const windowKey = getWindowProperty(type)
+      if (windowKey) return windowKey in window
+      return false
     }
-    return false;
+    return false
   }
 }
