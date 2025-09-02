@@ -1,5 +1,11 @@
 # @danyalwe/capacitor-sensors
 
+## 1.0.0
+
+### Major Changes
+
+- 6219362: fix various bugs and remove enums
+
 ## 0.0.5
 
 ### Patch Changes
