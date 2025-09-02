@@ -113,33 +113,31 @@ export class SensorsWeb extends WebPlugin {
         };
     }
     async checkPermissions() {
-        if (typeof navigator === 'undefined' || !navigator.permissions) {
+        if (typeof navigator === 'undefined' || !navigator.permissions)
             throw this.unavailable('Permissions API not available in this browser.');
-        }
         const allPerms = [].concat(...Object.values(webNeededPerms));
         const uniquePerms = Array.from(new Set(allPerms));
-        const permission = await Promise.all(uniquePerms.map((p) => navigator.permissions.query({ name: p })));
+        const permission = await Promise.all(uniquePerms.map(p => navigator.permissions.query({ name: p })));
         return permission.reduce((p, c) => {
             return Object.assign(Object.assign({}, p), { [c.name]: c.state });
         }, {});
     }
     async requestPermissions(options) {
-        if (typeof navigator === 'undefined' || !navigator.permissions) {
+        if (typeof navigator === 'undefined' || !navigator.permissions)
             throw this.unavailable('Permissions API not available in this browser.');
-        }
-        const permission = await Promise.all(webNeededPerms[options.type].map((p) => navigator.permissions.query({ name: p })));
+        const permission = await Promise.all(webNeededPerms[options.type].map(p => navigator.permissions.query({ name: p })));
         return permission.reduce((p, c) => {
             return Object.assign(Object.assign({}, p), { [c.name]: c.state });
         }, {});
     }
     async start(options) {
-        const sensor = this.sensors.find((s) => s.type === options.type);
+        const sensor = this.sensors.find(s => s.type === options.type);
         if (!sensor)
             throw this.unavailable(`Sensor of type ${options.type} not initialized.`);
         sensor.start();
     }
     async stop(options) {
-        const sensor = this.sensors.find((s) => s.type === options.type);
+        const sensor = this.sensors.find(s => s.type === options.type);
         if (!sensor)
             throw this.unavailable(`Sensor of type ${options.type} not initialized.`);
         sensor.stop();

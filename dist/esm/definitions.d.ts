@@ -3,10 +3,10 @@ import type { PermissionState, PluginListenerHandle } from '@capacitor/core';
  * Interface representing the permission status for various web sensors.
  */
 export interface PermissionStatus {
-    accelerometer: PermissionState;
+    'accelerometer': PermissionState;
     'ambient-light-sensor': PermissionState;
-    gyroscope: PermissionState;
-    magnetometer: PermissionState;
+    'gyroscope': PermissionState;
+    'magnetometer': PermissionState;
 }
 /**
  * Array of possible sensor delays.
