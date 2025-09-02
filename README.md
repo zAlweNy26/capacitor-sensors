@@ -107,6 +107,7 @@ The Sensors Plugin interface.
 
 ### Interfaces
 
+
 #### SensorOptions
 
 Represents the options for a sensor.
@@ -116,6 +117,7 @@ Represents the options for a sensor.
 | **`type`**  | <code><a href="#sensortype">SensorType</a></code>   | The type of sensor to use.         |
 | **`delay`** | <code><a href="#sensordelay">SensorDelay</a></code> | The delay between sensor readings. |
 
+
 #### SensorData
 
 Represents the data returned by a sensor, including any additional information about the sensor.
@@ -123,6 +125,7 @@ Represents the data returned by a sensor, including any additional information a
 | Prop        | Type                                                |
 | ----------- | --------------------------------------------------- |
 | **`infos`** | <code><a href="#sensorinfos">SensorInfos</a></code> |
+
 
 #### SensorInfos
 
@@ -140,16 +143,18 @@ Interface representing sensor information.
 | **`minDelay`**   | <code>number</code> | The minimum delay between sensor readings in microseconds. |
 | **`maxDelay`**   | <code>number</code> | The maximum delay between sensor readings in microseconds. |
 
+
 #### PermissionStatus
 
 Interface representing the permission status for various web sensors.
 
 | Prop                         | Type                                                        |
 | ---------------------------- | ----------------------------------------------------------- |
-| **`accelerometer`**          | <code><a href="#permissionstate">PermissionState</a></code> |
+| **`'accelerometer'`**        | <code><a href="#permissionstate">PermissionState</a></code> |
 | **`'ambient-light-sensor'`** | <code><a href="#permissionstate">PermissionState</a></code> |
-| **`gyroscope`**              | <code><a href="#permissionstate">PermissionState</a></code> |
-| **`magnetometer`**           | <code><a href="#permissionstate">PermissionState</a></code> |
+| **`'gyroscope'`**            | <code><a href="#permissionstate">PermissionState</a></code> |
+| **`'magnetometer'`**         | <code><a href="#permissionstate">PermissionState</a></code> |
+
 
 #### SensorResult
 
@@ -161,21 +166,26 @@ Represents the result of a sensor reading.
 | **`timestamp`** | <code>number</code> | The timestamp of the sensor reading, if available. |
 | **`values`**    | <code>{}</code>     | The values obtained from the sensor reading.       |
 
+
 #### PluginListenerHandle
 
 | Prop         | Type                      |
 | ------------ | ------------------------- |
 | **`remove`** | <code>() =&gt; any</code> |
 
+
 ### Type Aliases
+
 
 #### SensorType
 
 <code>(typeof SensorTypes)[number]</code>
 
+
 #### SensorDelay
 
 <code>(typeof SensorDelays)[number]</code>
+
 
 #### PermissionState
 

@@ -33,15 +33,15 @@
     "ios/Plugin/"
   ],
   "scripts": {
-    "verify": "pnpm run verify:ios && pnpm run verify:android && pnpm run verify:web",
+    "verify": "pnpm run verify:web && pnpm run verify:android && pnpm run verify:ios",
     "verify:ios": "cd ios && pod install && xcodebuild -workspace Plugin.xcworkspace -scheme Plugin -destination generic/platform=iOS && cd ..",
-    "verify:android": "cd android && gradlew clean build test && cd ..",
+    "verify:android": "cd android && ./gradlew clean build test && cd ..",
     "verify:web": "pnpm run build",
     "lint": "eslint && pnpm run swiftlint lint",
     "fmt": "eslint --fix && pnpm run swiftlint --fix --format",
     "swiftlint": "node-swiftlint",
     "docgen": "docgen --api SensorsPlugin --output-readme README.md --output-json dist/docs.json",
-    "build": "pnpm run clean && tsc && rollup -c rollup.config.mjs --bundleConfigAsCjs",
+    "build": "pnpm run clean && pnpm run docgen && tsc && rollup -c rollup.config.mjs",
     "clean": "rimraf ./dist",
     "watch": "tsc --watch",
     "release": "pnpm run build && changeset publish"
