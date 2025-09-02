@@ -2,17 +2,6 @@
   "name": "@danyalwe/capacitor-sensors",
   "version": "0.0.5",
   "description": "Get access to every sensor present in the device!",
-  "main": "dist/plugin.cjs.js",
-  "module": "dist/esm/index.js",
-  "types": "dist/esm/index.d.ts",
-  "unpkg": "dist/plugin.js",
-  "files": [
-    "android/src/main/",
-    "android/build.gradle",
-    "dist/",
-    "ios/Plugin/",
-    "SensorsPlugin.podspec"
-  ],
   "author": "zAlweNy26",
   "license": "MIT",
   "repository": {
@@ -32,14 +21,24 @@
     "ios",
     "ionic"
   ],
+  "main": "dist/plugin.cjs.js",
+  "module": "dist/esm/index.js",
+  "unpkg": "dist/plugin.js",
+  "types": "dist/esm/index.d.ts",
+  "files": [
+    "SensorsPlugin.podspec",
+    "android/build.gradle",
+    "android/src/main/",
+    "dist/",
+    "ios/Plugin/"
+  ],
   "scripts": {
     "verify": "pnpm run verify:ios && pnpm run verify:android && pnpm run verify:web",
     "verify:ios": "cd ios && pod install && xcodebuild -workspace Plugin.xcworkspace -scheme Plugin -destination generic/platform=iOS && cd ..",
     "verify:android": "cd android && gradlew clean build test && cd ..",
     "verify:web": "pnpm run build",
-    "lint": "pnpm run eslint && pnpm run prettier --check && pnpm run swiftlint lint",
-    "fmt": "pnpm run eslint --fix && pnpm run prettier --write && pnpm run swiftlint --fix --format",
-    "eslint": "eslint . --ext ts",
+    "lint": "eslint && pnpm run prettier --check && pnpm run swiftlint lint",
+    "fmt": "eslint --fix && pnpm run prettier --write && pnpm run swiftlint --fix --format",
     "prettier": "prettier \"**/*.{css,html,ts,js}\"",
     "swiftlint": "node-swiftlint",
     "docgen": "docgen --api SensorsPlugin --output-readme README.md --output-json dist/docs.json",
@@ -48,28 +47,28 @@
     "watch": "tsc --watch",
     "release": "pnpm run build && changeset publish"
   },
+  "peerDependencies": {
+    "@capacitor/core": ">=7.0.0"
+  },
   "devDependencies": {
-    "@capacitor/android": "^7.0.0",
-    "@capacitor/core": "^7.0.0",
+    "@antfu/eslint-config": "^5.2.1",
+    "@capacitor/android": "^7.4.3",
+    "@capacitor/core": "^7.4.3",
     "@capacitor/docgen": "^0.3.0",
-    "@capacitor/ios": "^7.0.0",
-    "@changesets/cli": "^2.29.6",
+    "@capacitor/ios": "^7.4.3",
     "@ionic/eslint-config": "^0.4.0",
     "@ionic/prettier-config": "^4.0.0",
     "@ionic/swiftlint-config": "^2.0.0",
     "@types/w3c-generic-sensor": "^1.0.10",
-    "@typescript-eslint/eslint-plugin": "^5.62.0",
-    "eslint": "^8.57.0",
+    "changelogen": "^0.6.2",
+    "eslint": "^9.34.0",
     "prettier": "^3.6.2",
     "prettier-plugin-java": "^2.7.4",
     "prettier-plugin-kotlin": "^2.1.0",
     "rimraf": "^6.0.1",
-    "rollup": "^4.30.1",
+    "rollup": "^4.50.0",
     "swiftlint": "^2.0.0",
-    "typescript": "~5.1.6"
-  },
-  "peerDependencies": {
-    "@capacitor/core": ">=7.0.0"
+    "typescript": "~5.9.2"
   },
   "prettier": "@ionic/prettier-config",
   "swiftlint": "@ionic/swiftlint-config",

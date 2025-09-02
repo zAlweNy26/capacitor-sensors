@@ -1,14 +1,14 @@
-import { WebPlugin } from '@capacitor/core';
-
 import type {
-  SensorsPlugin,
-  SensorOptions,
   PermissionStatus,
-  SensorResult,
   SensorData,
-  SensorType,
   SensorDelay,
+  SensorOptions,
+  SensorResult,
+  SensorsPlugin,
+  SensorType,
 } from './definitions';
+
+import { WebPlugin } from '@capacitor/core';
 import { SensorTypes } from './definitions';
 
 const webSupportedSensors = {
@@ -56,8 +56,11 @@ const webNeededPerms = {
   STEP_DETECTOR: [],
 } satisfies Record<SensorType, (keyof PermissionStatus)[]>;
 
-const getWindowProperty = (type: SensorType) =>
-  Object.entries(webSupportedSensors).find(([, value]) => value === type)?.[0] as keyof typeof webSupportedSensors;
+function getWindowProperty(type: SensorType) {
+  return Object.entries(webSupportedSensors).find(
+    ([, value]) => value === type,
+  )?.[0] as keyof typeof webSupportedSensors;
+}
 
 class WebSensor implements SensorData {
   private sensor: Sensor | undefined;
@@ -75,7 +78,7 @@ class WebSensor implements SensorData {
 
   start(): void {
     this.abortController = new AbortController();
-    if (this.type == 'MOTION_DETECTOR' || !this.sensor) {
+    if (this.type === 'MOTION_DETECTOR' || !this.sensor) {
       window.addEventListener(
         'devicemotion',
         (ev) => {
@@ -173,7 +176,8 @@ export class SensorsWeb extends WebPlugin implements SensorsPlugin {
     sensor.stop();
   }
 
-  async init({ type, delay }: SensorOptions): Promise<SensorData | undefined> {
+  async init(options: SensorOptions): Promise<SensorData | undefined> {
+    const { type, delay = 'NORMAL' } = options;
     if (this.isPresent(type)) {
       const sensor = new WebSensor(this.onSensorData, type, delay);
       this.sensors.push(sensor);

@@ -42,7 +42,10 @@ const webNeededPerms = {
     STEP_COUNTER: [],
     STEP_DETECTOR: [],
 };
-const getWindowProperty = (type) => { var _a; return (_a = Object.entries(webSupportedSensors).find(([, value]) => value === type)) === null || _a === void 0 ? void 0 : _a[0]; };
+function getWindowProperty(type) {
+    var _a;
+    return (_a = Object.entries(webSupportedSensors).find(([, value]) => value === type)) === null || _a === void 0 ? void 0 : _a[0];
+}
 class WebSensor {
     constructor(notify, type, delay = 'NORMAL') {
         this.notify = notify;
@@ -56,7 +59,7 @@ class WebSensor {
     }
     start() {
         this.abortController = new AbortController();
-        if (this.type == 'MOTION_DETECTOR' || !this.sensor) {
+        if (this.type === 'MOTION_DETECTOR' || !this.sensor) {
             window.addEventListener('devicemotion', (ev) => {
                 var _a, _b, _c;
                 const x = ((_a = ev.accelerationIncludingGravity) === null || _a === void 0 ? void 0 : _a.x) || 0;
@@ -141,7 +144,8 @@ export class SensorsWeb extends WebPlugin {
             throw this.unavailable(`Sensor of type ${options.type} not initialized.`);
         sensor.stop();
     }
-    async init({ type, delay }) {
+    async init(options) {
+        const { type, delay = 'NORMAL' } = options;
         if (this.isPresent(type)) {
             const sensor = new WebSensor(this.onSensorData, type, delay);
             this.sensors.push(sensor);

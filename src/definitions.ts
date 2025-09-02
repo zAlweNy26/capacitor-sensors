@@ -107,7 +107,7 @@ export interface SensorInfos {
 /**
  * Represents the data returned by a sensor, including any additional information about the sensor.
  */
-export interface SensorData extends SensorOptions {
+export interface SensorData extends Required<SensorOptions> {
   infos?: SensorInfos;
 }
 
@@ -138,47 +138,47 @@ export interface SensorsPlugin {
    * @param options The options to initialize the sensor plugin with.
    * @returns A Promise that resolves to the sensor data, or undefined if initialization failed.
    */
-  init(options: SensorOptions): Promise<SensorData | undefined>;
+  init: (options: SensorOptions) => Promise<SensorData | undefined>;
   /**
    * Gets a list of available sensors.
    * @returns A Promise that resolves to an object containing the available sensors.
    */
-  getAvailableSensors(): Promise<{
+  getAvailableSensors: () => Promise<{
     sensors: SensorType[];
   }>;
   /**
    * Checks the permissions for the given sensor.
    * @returns A Promise that resolves to the permission status.
    */
-  checkPermissions(): Promise<PermissionStatus>;
+  checkPermissions: () => Promise<PermissionStatus>;
   /**
    * Requests permission to use the given sensor.
    * @param sensor The sensor to request permission for.
    * @returns A Promise that resolves to the permission status.
    */
-  requestPermissions(sensor: SensorOptions): Promise<PermissionStatus>;
+  requestPermissions: (sensor: SensorOptions) => Promise<PermissionStatus>;
   /**
    * Starts the given sensor.
    * @param sensor The sensor to start.
    * @returns A Promise that resolves when the sensor has started.
    */
-  start(options: { type: SensorType }): Promise<void>;
+  start: (options: { type: SensorType }) => Promise<void>;
   /**
    * Stops the given sensor.
    * @param sensor The sensor to stop.
    * @returns A Promise that resolves when the sensor has stopped.
    */
-  stop(options: { type: SensorType }): Promise<void>;
+  stop: (options: { type: SensorType }) => Promise<void>;
   /**
    * Adds a listener for the given sensor event.
    * @param eventName The name of the event to listen for.
    * @param listenerFunc The function to call when the event is triggered.
    * @returns A Promise that resolves to a handle for the listener.
    */
-  addListener(eventName: SensorType, listenerFunc: (event: SensorResult) => void): Promise<PluginListenerHandle>;
+  addListener: (eventName: SensorType, listenerFunc: (event: SensorResult) => void) => Promise<PluginListenerHandle>;
   /**
    * Removes all listeners for the sensor plugin.
    * @returns A Promise that resolves when all listeners have been removed.
    */
-  removeAllListeners(): Promise<void>;
+  removeAllListeners: () => Promise<void>;
 }

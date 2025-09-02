@@ -30,18 +30,21 @@ If you want to use the **`STEP_COUNTER`** or **`STEP_DETECTOR`** sensor, you nee
 The following example demonstrates how to use the Sensors plugin to access the device's accelerometer:
 
 ```ts
-import { Sensors } from '@danyalwe/capacitor-sensors';
+import { Sensors } from '@danyalwe/capacitor-sensors'
 
-// Initialize the specific sensor and obtain 
-const sensor = await Sensors.init({ type: SensorType.ACCELEROMETER });
+// Initialize the specific sensor and obtain infos about it
+const sensor = await Sensors.init({ type: 'ACCELEROMETER' })
 
 // Start the sensor to begin receiving data
-await Sensors.start({ type: SensorType.ACCELEROMETER });
+await Sensors.start({ type: 'ACCELEROMETER' })
 
 // Add a listener to receive accelerometer data
 Sensors.addListener('ACCELEROMETER', (data) => {
-  console.log('Accelerometer data:', data);
-});
+  console.log('Accelerometer data:', data)
+})
+
+// Stop the sensor
+await Sensors.stop({ type: 'ACCELEROMETER' })
 ```
 
 ## Todos
@@ -92,14 +95,6 @@ Sensors.addListener('ACCELEROMETER', (data) => {
 
 <docgen-index>
 
-* [`init(...)`](#init)
-* [`getAvailableSensors()`](#getavailablesensors)
-* [`checkPermissions()`](#checkpermissions)
-* [`requestPermissions(...)`](#requestpermissions)
-* [`start(...)`](#start)
-* [`stop(...)`](#stop)
-* [`addListener(any, ...)`](#addlistenerany-)
-* [`removeAllListeners()`](#removealllisteners)
 * [Interfaces](#interfaces)
 * [Type Aliases](#type-aliases)
 
@@ -110,133 +105,7 @@ Sensors.addListener('ACCELEROMETER', (data) => {
 
 The Sensors Plugin interface.
 
-### init(...)
-
-```typescript
-init(options: SensorOptions) => any
-```
-
-Initializes the sensor plugin with the given options.
-
-| Param         | Type                                                    | Description                                       |
-| ------------- | ------------------------------------------------------- | ------------------------------------------------- |
-| **`options`** | <code><a href="#sensoroptions">SensorOptions</a></code> | The options to initialize the sensor plugin with. |
-
-**Returns:** <code>any</code>
-
---------------------
-
-
-### getAvailableSensors()
-
-```typescript
-getAvailableSensors() => any
-```
-
-Gets a list of available sensors.
-
-**Returns:** <code>any</code>
-
---------------------
-
-
-### checkPermissions()
-
-```typescript
-checkPermissions() => any
-```
-
-Checks the permissions for the given sensor.
-
-**Returns:** <code>any</code>
-
---------------------
-
-
-### requestPermissions(...)
-
-```typescript
-requestPermissions(sensor: SensorOptions) => any
-```
-
-Requests permission to use the given sensor.
-
-| Param        | Type                                                    | Description                           |
-| ------------ | ------------------------------------------------------- | ------------------------------------- |
-| **`sensor`** | <code><a href="#sensoroptions">SensorOptions</a></code> | The sensor to request permission for. |
-
-**Returns:** <code>any</code>
-
---------------------
-
-
-### start(...)
-
-```typescript
-start(options: { type: SensorType; }) => any
-```
-
-Starts the given sensor.
-
-| Param         | Type                        |
-| ------------- | --------------------------- |
-| **`options`** | <code>{ type: any; }</code> |
-
-**Returns:** <code>any</code>
-
---------------------
-
-
-### stop(...)
-
-```typescript
-stop(options: { type: SensorType; }) => any
-```
-
-Stops the given sensor.
-
-| Param         | Type                        |
-| ------------- | --------------------------- |
-| **`options`** | <code>{ type: any; }</code> |
-
-**Returns:** <code>any</code>
-
---------------------
-
-
-### addListener(any, ...)
-
-```typescript
-addListener(eventName: any, listenerFunc: (event: SensorResult) => void) => any
-```
-
-Adds a listener for the given sensor event.
-
-| Param              | Type                                                                      | Description                                       |
-| ------------------ | ------------------------------------------------------------------------- | ------------------------------------------------- |
-| **`eventName`**    | <code>any</code>                                                          | The name of the event to listen for.              |
-| **`listenerFunc`** | <code>(event: <a href="#sensorresult">SensorResult</a>) =&gt; void</code> | The function to call when the event is triggered. |
-
-**Returns:** <code>any</code>
-
---------------------
-
-
-### removeAllListeners()
-
-```typescript
-removeAllListeners() => any
-```
-
-Removes all listeners for the sensor plugin.
-
-**Returns:** <code>any</code>
-
---------------------
-
-
 ### Interfaces
-
 
 #### SensorOptions
 
@@ -247,7 +116,6 @@ Represents the options for a sensor.
 | **`type`**  | <code><a href="#sensortype">SensorType</a></code>   | The type of sensor to use.         |
 | **`delay`** | <code><a href="#sensordelay">SensorDelay</a></code> | The delay between sensor readings. |
 
-
 #### SensorData
 
 Represents the data returned by a sensor, including any additional information about the sensor.
@@ -255,7 +123,6 @@ Represents the data returned by a sensor, including any additional information a
 | Prop        | Type                                                |
 | ----------- | --------------------------------------------------- |
 | **`infos`** | <code><a href="#sensorinfos">SensorInfos</a></code> |
-
 
 #### SensorInfos
 
@@ -273,7 +140,6 @@ Interface representing sensor information.
 | **`minDelay`**   | <code>number</code> | The minimum delay between sensor readings in microseconds. |
 | **`maxDelay`**   | <code>number</code> | The maximum delay between sensor readings in microseconds. |
 
-
 #### PermissionStatus
 
 Interface representing the permission status for various web sensors.
@@ -285,7 +151,6 @@ Interface representing the permission status for various web sensors.
 | **`gyroscope`**              | <code><a href="#permissionstate">PermissionState</a></code> |
 | **`magnetometer`**           | <code><a href="#permissionstate">PermissionState</a></code> |
 
-
 #### SensorResult
 
 Represents the result of a sensor reading.
@@ -296,26 +161,21 @@ Represents the result of a sensor reading.
 | **`timestamp`** | <code>number</code> | The timestamp of the sensor reading, if available. |
 | **`values`**    | <code>{}</code>     | The values obtained from the sensor reading.       |
 
-
 #### PluginListenerHandle
 
 | Prop         | Type                      |
 | ------------ | ------------------------- |
 | **`remove`** | <code>() =&gt; any</code> |
 
-
 ### Type Aliases
-
 
 #### SensorType
 
 <code>(typeof SensorTypes)[number]</code>
 
-
 #### SensorDelay
 
 <code>(typeof SensorDelays)[number]</code>
-
 
 #### PermissionState
 
