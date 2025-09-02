@@ -1,6 +1,6 @@
 {
   "name": "@danyalwe/capacitor-sensors",
-  "version": "0.0.5",
+  "version": "1.0.0",
   "description": "Get access to every sensor present in the device!",
   "author": "zAlweNy26",
   "license": "MIT",
