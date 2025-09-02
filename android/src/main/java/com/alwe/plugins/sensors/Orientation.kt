@@ -15,17 +15,18 @@ class Orientation(
     private var sensorAccelerometer = SensorsPlugin.sensorsManager?.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)
     private var sensorMagnetometer = SensorsPlugin.sensorsManager?.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD)
     private var sensorGravity = SensorsPlugin.sensorsManager?.getDefaultSensor(Sensor.TYPE_GRAVITY)
-    private var orientationValues: FloatArray = floatArrayOf()
-    private var accelerometerData: FloatArray = floatArrayOf()
-    private var magnetometerData: FloatArray = floatArrayOf()
-    private var gravityData: FloatArray = floatArrayOf()
-    private var rMatrix: FloatArray = floatArrayOf()
-    private var iMatrix: FloatArray = floatArrayOf()
+    private var orientationValues = FloatArray(3)
+    private var accelerometerData = FloatArray(3)
+    private var magnetometerData = FloatArray(3)
+    private var gravityData = FloatArray(3)
+    private var rMatrix = FloatArray(9)
+    private var iMatrix = FloatArray(9)
 
     override fun init(): JSObject {
         val ret = JSObject()
-        ret.put("type", this.type.ordinal)
-        ret.put("delay", this.delay.ordinal)
+        ret.put("infos", null)
+        ret.put("type", this.type.name)
+        ret.put("delay", this.delay.name)
         return ret
     }
 
@@ -66,7 +67,7 @@ class Orientation(
                 SensorManager.getOrientation(rMatrix, orientationValues)
 
                 content.put("accuracy", event.accuracy)
-                content.put("timestamp", event.timestamp)
+                content.put("timestamp", event.timestamp) // nanoseconds
                 content.put("values", JSArray(orientationValues))
 
                 this.plugin.notify(this.type.name, content, true)

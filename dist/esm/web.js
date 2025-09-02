@@ -1,92 +1,113 @@
 import { WebPlugin } from '@capacitor/core';
-import { SensorDelay, SensorType } from './definitions';
+import { SensorTypes } from './definitions';
 const webSupportedSensors = {
-    AbsoluteOrientationSensor: SensorType.ABSOLUTE_ORIENTATION,
-    Accelerometer: SensorType.ACCELEROMETER,
-    AmbientLightSensor: SensorType.AMBIENT_LIGHT,
-    GravitySensor: SensorType.GRAVITY,
-    Gyroscope: SensorType.GYROSCOPE,
-    LinearAccelerationSensor: SensorType.LINEAR_ACCELERATION,
-    Magnetometer: SensorType.MAGNETOMETER,
-    RelativeOrientationSensor: SensorType.RELATIVE_ORIENTATION,
-    ondevicemotion: SensorType.MOTION_DETECTOR,
+    AbsoluteOrientationSensor: 'ABSOLUTE_ORIENTATION',
+    Accelerometer: 'ACCELEROMETER',
+    AmbientLightSensor: 'AMBIENT_LIGHT',
+    GravitySensor: 'GRAVITY',
+    Gyroscope: 'GYROSCOPE',
+    LinearAccelerationSensor: 'LINEAR_ACCELERATION',
+    Magnetometer: 'MAGNETOMETER',
+    RelativeOrientationSensor: 'RELATIVE_ORIENTATION',
+    ondevicemotion: 'MOTION_DETECTOR',
 };
 const webSensorFrequency = {
-    [SensorDelay.FASTEST]: 0,
-    [SensorDelay.GAME]: 15,
-    [SensorDelay.UI]: 30,
-    [SensorDelay.NORMAL]: 60,
+    FASTEST: 0,
+    GAME: 15,
+    UI: 30,
+    NORMAL: 60,
 };
 const webNeededPerms = {
-    [SensorType.ABSOLUTE_ORIENTATION]: ['accelerometer', 'gyroscope', 'magnetometer'],
-    [SensorType.ACCELEROMETER]: ['accelerometer'],
-    [SensorType.AMBIENT_LIGHT]: ['ambient-light-sensor'],
-    [SensorType.GRAVITY]: ['accelerometer'],
-    [SensorType.GYROSCOPE]: ['gyroscope'],
-    [SensorType.LINEAR_ACCELERATION]: ['accelerometer'],
-    [SensorType.MAGNETOMETER]: ['magnetometer'],
-    [SensorType.RELATIVE_ORIENTATION]: ['accelerometer', 'gyroscope'],
+    ABSOLUTE_ORIENTATION: ['accelerometer', 'gyroscope', 'magnetometer'],
+    ACCELEROMETER: ['accelerometer'],
+    AMBIENT_LIGHT: ['ambient-light-sensor'],
+    GRAVITY: ['accelerometer'],
+    GYROSCOPE: ['gyroscope'],
+    LINEAR_ACCELERATION: ['accelerometer'],
+    MAGNETOMETER: ['magnetometer'],
+    RELATIVE_ORIENTATION: ['accelerometer', 'gyroscope'],
+    TEMPERATURE: [],
+    GAME_ROTATION_VECTOR: [],
+    GEOMAGNETIC_ROTATION_VECTOR: [],
+    HEART_BEAT: [],
+    HEART_RATE: [],
+    MOTION_DETECTOR: [],
+    POSE_6DOF: [],
+    PRESSURE: [],
+    PROXIMITY: [],
+    RELATIVE_HUMIDITY: [],
+    ROTATION_VECTOR: [],
+    SIGNIFICANT_MOTION: [],
+    STATIONARY_DETECTOR: [],
+    STEP_COUNTER: [],
+    STEP_DETECTOR: [],
 };
-const getWindowProperty = (type) => Object.keys(webSupportedSensors).find((key) => webSupportedSensors[key] === type);
+const getWindowProperty = (type) => { var _a; return (_a = Object.entries(webSupportedSensors).find(([, value]) => value === type)) === null || _a === void 0 ? void 0 : _a[0]; };
 class WebSensor {
-    constructor(notify, type, delay = SensorDelay.NORMAL) {
-        var _a;
+    constructor(notify, type, delay = 'NORMAL') {
         this.notify = notify;
         this.type = type;
         this.delay = delay;
         this.abortController = new AbortController();
-        const windowKey = (_a = getWindowProperty(type)) !== null && _a !== void 0 ? _a : '';
+        const windowKey = getWindowProperty(type);
+        if (!windowKey || windowKey === 'ondevicemotion')
+            return;
         this.sensor = new window[windowKey]({ frequency: webSensorFrequency[delay] });
     }
     start() {
         this.abortController = new AbortController();
-        if (this.type == SensorType.MOTION_DETECTOR) {
+        if (this.type == 'MOTION_DETECTOR' || !this.sensor) {
             window.addEventListener('devicemotion', (ev) => {
                 var _a, _b, _c;
                 const x = ((_a = ev.accelerationIncludingGravity) === null || _a === void 0 ? void 0 : _a.x) || 0;
                 const y = ((_b = ev.accelerationIncludingGravity) === null || _b === void 0 ? void 0 : _b.y) || 0;
                 const z = ((_c = ev.accelerationIncludingGravity) === null || _c === void 0 ? void 0 : _c.z) || 0;
                 const result = {
-                    accuracy: -1,
+                    accuracy: 0,
                     timestamp: ev.timeStamp,
                     values: [x, y, z],
                 };
-                this.notify(SensorType[this.type], result);
+                this.notify(this.type, result);
             }, { signal: this.abortController.signal });
         }
         else {
+            const sensor = this.sensor;
             this.sensor.addEventListener('reading', () => {
                 const values = [];
-                if ('illuminance' in this.sensor)
-                    values.push(this.sensor.illuminance);
-                if ('quaternion' in this.sensor)
-                    values.push(...this.sensor.quaternion);
-                if ('x' in this.sensor)
-                    values.push(this.sensor.x);
-                if ('y' in this.sensor)
-                    values.push(this.sensor.y);
-                if ('z' in this.sensor)
-                    values.push(this.sensor.z);
+                if ('illuminance' in sensor)
+                    values.push(sensor.illuminance);
+                if ('quaternion' in sensor)
+                    values.push(...sensor.quaternion);
+                if ('x' in sensor)
+                    values.push(sensor.x);
+                if ('y' in sensor)
+                    values.push(sensor.y);
+                if ('z' in sensor)
+                    values.push(sensor.z);
                 const result = {
-                    accuracy: -1,
-                    timestamp: this.sensor.timestamp || -1,
+                    accuracy: 0,
+                    timestamp: sensor.timestamp || 0,
                     values,
                 };
-                this.notify(SensorType[this.type], result);
+                this.notify(this.type, result);
             });
+            this.sensor.start();
         }
-        this.sensor.start();
     }
     stop() {
-        this.sensor.removeEventListener('reading', null);
+        var _a, _b;
+        (_a = this.sensor) === null || _a === void 0 ? void 0 : _a.removeEventListener('reading', null);
         this.abortController.abort('stop');
-        this.sensor.stop();
+        (_b = this.sensor) === null || _b === void 0 ? void 0 : _b.stop();
     }
 }
 export class SensorsWeb extends WebPlugin {
     constructor() {
         super(...arguments);
         this.sensors = [];
+        this.onSensorData = (eventName, data) => {
+            this.notifyListeners(eventName, data, true);
+        };
     }
     async checkPermissions() {
         if (typeof navigator === 'undefined' || !navigator.permissions) {
@@ -99,11 +120,11 @@ export class SensorsWeb extends WebPlugin {
             return Object.assign(Object.assign({}, p), { [c.name]: c.state });
         }, {});
     }
-    async requestPermissions(sensor) {
+    async requestPermissions(options) {
         if (typeof navigator === 'undefined' || !navigator.permissions) {
             throw this.unavailable('Permissions API not available in this browser.');
         }
-        const permission = await Promise.all(webNeededPerms[sensor.type].map((p) => navigator.permissions.query({ name: p })));
+        const permission = await Promise.all(webNeededPerms[options.type].map((p) => navigator.permissions.query({ name: p })));
         return permission.reduce((p, c) => {
             return Object.assign(Object.assign({}, p), { [c.name]: c.state });
         }, {});
@@ -122,11 +143,11 @@ export class SensorsWeb extends WebPlugin {
     }
     async init({ type, delay }) {
         if (this.isPresent(type)) {
-            const sensor = new WebSensor(this.notifyListeners, type, delay);
+            const sensor = new WebSensor(this.onSensorData, type, delay);
             this.sensors.push(sensor);
             return { type, delay };
         }
-        return;
+        return { type, delay };
     }
     async getAvailableSensors() {
         const sensorsList = Object.entries(webSupportedSensors)
@@ -137,7 +158,7 @@ export class SensorsWeb extends WebPlugin {
         };
     }
     isPresent(type) {
-        if (type in SensorType) {
+        if (SensorTypes.includes(type)) {
             const windowKey = getWindowProperty(type);
             if (windowKey)
                 return windowKey in window;

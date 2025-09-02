@@ -2,6 +2,8 @@ package com.alwe.plugins.sensors
 
 import android.hardware.Sensor
 import android.hardware.SensorEventListener
+import android.os.Build
+import androidx.annotation.RequiresApi
 import com.getcapacitor.JSObject
 
 interface PluginSensor : SensorEventListener {
@@ -29,17 +31,21 @@ enum class SensorType(val type: Int) {
     GEOMAGNETIC_ROTATION_VECTOR(Sensor.TYPE_GEOMAGNETIC_ROTATION_VECTOR),
     GRAVITY(Sensor.TYPE_GRAVITY),
     GYROSCOPE(Sensor.TYPE_GYROSCOPE),
+    @RequiresApi(Build.VERSION_CODES.N)
     HEART_BEAT(Sensor.TYPE_HEART_BEAT),
     HEART_RATE(Sensor.TYPE_HEART_RATE),
     LINEAR_ACCELERATION(Sensor.TYPE_LINEAR_ACCELERATION),
     MAGNETOMETER(Sensor.TYPE_MAGNETIC_FIELD),
+    @RequiresApi(Build.VERSION_CODES.N)
     MOTION_DETECTOR(Sensor.TYPE_MOTION_DETECT),
+    @RequiresApi(Build.VERSION_CODES.N)
     POSE_6DOF(Sensor.TYPE_POSE_6DOF),
     PRESSURE(Sensor.TYPE_PRESSURE),
     PROXIMITY(Sensor.TYPE_PROXIMITY),
     RELATIVE_HUMIDITY(Sensor.TYPE_RELATIVE_HUMIDITY),
     ROTATION_VECTOR(Sensor.TYPE_ROTATION_VECTOR),
     SIGNIFICANT_MOTION(Sensor.TYPE_SIGNIFICANT_MOTION),
+    @RequiresApi(Build.VERSION_CODES.N)
     STATIONARY_DETECTOR(Sensor.TYPE_STATIONARY_DETECT),
     STEP_COUNTER(Sensor.TYPE_STEP_COUNTER),
     STEP_DETECTOR(Sensor.TYPE_STEP_DETECTOR),
@@ -47,7 +53,7 @@ enum class SensorType(val type: Int) {
     RELATIVE_ORIENTATION(-2);
 
     companion object {
-        private val map = SensorType.values().associateBy(SensorType::type)
+        private val map = SensorType.entries.associateBy(SensorType::type)
         fun fromInt(type: Int) = map[type]
     }
 }

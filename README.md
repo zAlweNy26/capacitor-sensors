@@ -94,32 +94,35 @@ Sensors.addListener('ACCELEROMETER', (data) => {
 
 * [`init(...)`](#init)
 * [`getAvailableSensors()`](#getavailablesensors)
-* [`checkPermissions(...)`](#checkpermissions)
+* [`checkPermissions()`](#checkpermissions)
 * [`requestPermissions(...)`](#requestpermissions)
 * [`start(...)`](#start)
 * [`stop(...)`](#stop)
-* [`addListener(...)`](#addlistener)
+* [`addListener(any, ...)`](#addlistenerany-)
 * [`removeAllListeners()`](#removealllisteners)
 * [Interfaces](#interfaces)
 * [Type Aliases](#type-aliases)
-* [Enums](#enums)
 
 </docgen-index>
 
 <docgen-api>
 <!--Update the source file JSDoc comments and rerun docgen to update the docs below-->
 
+The Sensors Plugin interface.
+
 ### init(...)
 
 ```typescript
-init(options: SensorOptions) => Promise<SensorData | undefined>
+init(options: SensorOptions) => any
 ```
 
-| Param         | Type                                                    |
-| ------------- | ------------------------------------------------------- |
-| **`options`** | <code><a href="#sensoroptions">SensorOptions</a></code> |
+Initializes the sensor plugin with the given options.
 
-**Returns:** <code>Promise&lt;<a href="#sensordata">SensorData</a>&gt;</code>
+| Param         | Type                                                    | Description                                       |
+| ------------- | ------------------------------------------------------- | ------------------------------------------------- |
+| **`options`** | <code><a href="#sensoroptions">SensorOptions</a></code> | The options to initialize the sensor plugin with. |
+
+**Returns:** <code>any</code>
 
 --------------------
 
@@ -127,10 +130,12 @@ init(options: SensorOptions) => Promise<SensorData | undefined>
 ### getAvailableSensors()
 
 ```typescript
-getAvailableSensors() => Promise<{ sensors: SensorType[]; }>
+getAvailableSensors() => any
 ```
 
-**Returns:** <code>Promise&lt;{ sensors: SensorType[]; }&gt;</code>
+Gets a list of available sensors.
+
+**Returns:** <code>any</code>
 
 --------------------
 
@@ -138,12 +143,12 @@ getAvailableSensors() => Promise<{ sensors: SensorType[]; }>
 ### checkPermissions()
 
 ```typescript
-checkPermissions() => Promise<PermissionStatus>
+checkPermissions() => any
 ```
 
 Checks the permissions for the given sensor.
 
-**Returns:** <code>Promise&lt;<a href="#permissionstatus">PermissionStatus</a>&gt;</code>
+**Returns:** <code>any</code>
 
 --------------------
 
@@ -151,14 +156,16 @@ Checks the permissions for the given sensor.
 ### requestPermissions(...)
 
 ```typescript
-requestPermissions(sensor: SensorData) => Promise<PermissionStatus>
+requestPermissions(sensor: SensorOptions) => any
 ```
 
-| Param        | Type                                              |
-| ------------ | ------------------------------------------------- |
-| **`sensor`** | <code><a href="#sensordata">SensorData</a></code> |
+Requests permission to use the given sensor.
 
-**Returns:** <code>Promise&lt;<a href="#permissionstatus">PermissionStatus</a>&gt;</code>
+| Param        | Type                                                    | Description                           |
+| ------------ | ------------------------------------------------------- | ------------------------------------- |
+| **`sensor`** | <code><a href="#sensoroptions">SensorOptions</a></code> | The sensor to request permission for. |
+
+**Returns:** <code>any</code>
 
 --------------------
 
@@ -166,12 +173,16 @@ requestPermissions(sensor: SensorData) => Promise<PermissionStatus>
 ### start(...)
 
 ```typescript
-start(sensor: SensorData) => Promise<void>
+start(options: { type: SensorType; }) => any
 ```
 
-| Param        | Type                                              |
-| ------------ | ------------------------------------------------- |
-| **`sensor`** | <code><a href="#sensordata">SensorData</a></code> |
+Starts the given sensor.
+
+| Param         | Type                        |
+| ------------- | --------------------------- |
+| **`options`** | <code>{ type: any; }</code> |
+
+**Returns:** <code>any</code>
 
 --------------------
 
@@ -179,28 +190,34 @@ start(sensor: SensorData) => Promise<void>
 ### stop(...)
 
 ```typescript
-stop(sensor: SensorData) => Promise<void>
+stop(options: { type: SensorType; }) => any
 ```
 
-| Param        | Type                                              |
-| ------------ | ------------------------------------------------- |
-| **`sensor`** | <code><a href="#sensordata">SensorData</a></code> |
+Stops the given sensor.
+
+| Param         | Type                        |
+| ------------- | --------------------------- |
+| **`options`** | <code>{ type: any; }</code> |
+
+**Returns:** <code>any</code>
 
 --------------------
 
 
-### addListener(...)
+### addListener(any, ...)
 
 ```typescript
-addListener(eventName: SensorEvent, listenerFunc: (event: SensorResult) => void) => Promise<PluginListenerHandle>
+addListener(eventName: any, listenerFunc: (event: SensorResult) => void) => any
 ```
 
-| Param              | Type                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
-| ------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **`eventName`**    | <code><a href="#sensorevent">SensorEvent</a></code> |
-| **`listenerFunc`** | <code>(event: <a href="#SensorResult">SensorResult</a>) =&gt; void</code>                                                                                                                                                                                                                                                                                                                                                                                                 |
+Adds a listener for the given sensor event.
 
-**Returns:** <code>Promise&lt;<a href="#pluginlistenerhandle">PluginListenerHandle</a>&gt;</code>
+| Param              | Type                                                                      | Description                                       |
+| ------------------ | ------------------------------------------------------------------------- | ------------------------------------------------- |
+| **`eventName`**    | <code>any</code>                                                          | The name of the event to listen for.              |
+| **`listenerFunc`** | <code>(event: <a href="#sensorresult">SensorResult</a>) =&gt; void</code> | The function to call when the event is triggered. |
+
+**Returns:** <code>any</code>
 
 --------------------
 
@@ -208,8 +225,12 @@ addListener(eventName: SensorEvent, listenerFunc: (event: SensorResult) => void)
 ### removeAllListeners()
 
 ```typescript
-removeAllListeners() => Promise<void>
+removeAllListeners() => any
 ```
+
+Removes all listeners for the sensor plugin.
+
+**Returns:** <code>any</code>
 
 --------------------
 
@@ -217,7 +238,19 @@ removeAllListeners() => Promise<void>
 ### Interfaces
 
 
+#### SensorOptions
+
+Represents the options for a sensor.
+
+| Prop        | Type                                                | Description                        |
+| ----------- | --------------------------------------------------- | ---------------------------------- |
+| **`type`**  | <code><a href="#sensortype">SensorType</a></code>   | The type of sensor to use.         |
+| **`delay`** | <code><a href="#sensordelay">SensorDelay</a></code> | The delay between sensor readings. |
+
+
 #### SensorData
+
+Represents the data returned by a sensor, including any additional information about the sensor.
 
 | Prop        | Type                                                |
 | ----------- | --------------------------------------------------- |
@@ -226,27 +259,24 @@ removeAllListeners() => Promise<void>
 
 #### SensorInfos
 
-| Prop             | Type                |
-| ---------------- | ------------------- |
-| **`vendor`**     | <code>string</code> |
-| **`version`**    | <code>number</code> |
-| **`type`**       | <code>number</code> |
-| **`maxRange`**   | <code>number</code> |
-| **`resolution`** | <code>number</code> |
-| **`power`**      | <code>number</code> |
-| **`minDelay`**   | <code>number</code> |
-| **`maxDelay`**   | <code>number</code> |
+Interface representing sensor information.
 
-
-#### SensorOptions
-
-| Prop        | Type                                                |
-| ----------- | --------------------------------------------------- |
-| **`type`**  | <code><a href="#sensortype">SensorType</a></code>   |
-| **`delay`** | <code><a href="#sensordelay">SensorDelay</a></code> |
+| Prop             | Type                | Description                                                |
+| ---------------- | ------------------- | ---------------------------------------------------------- |
+| **`name`**       | <code>string</code> | The name of the sensor.                                    |
+| **`vendor`**     | <code>string</code> | The vendor of the sensor.                                  |
+| **`version`**    | <code>number</code> | The version of the sensor.                                 |
+| **`type`**       | <code>number</code> | The type of the sensor.                                    |
+| **`maxRange`**   | <code>number</code> | The maximum range of the sensor in sensor units.           |
+| **`resolution`** | <code>number</code> | The resolution of the sensor in sensor units.              |
+| **`power`**      | <code>number</code> | The power consumption of the sensor in milliamperes.       |
+| **`minDelay`**   | <code>number</code> | The minimum delay between sensor readings in microseconds. |
+| **`maxDelay`**   | <code>number</code> | The maximum delay between sensor readings in microseconds. |
 
 
 #### PermissionStatus
+
+Interface representing the permission status for various web sensors.
 
 | Prop                         | Type                                                        |
 | ---------------------------- | ----------------------------------------------------------- |
@@ -256,74 +286,39 @@ removeAllListeners() => Promise<void>
 | **`magnetometer`**           | <code><a href="#permissionstate">PermissionState</a></code> |
 
 
-#### PluginListenerHandle
-
-| Prop         | Type                                      |
-| ------------ | ----------------------------------------- |
-| **`remove`** | <code>() =&gt; Promise&lt;void&gt;</code> |
-
-
 #### SensorResult
 
-| Prop            | Type                  |
-| --------------- | --------------------- |
-| **`accuracy`**  | <code>number</code>   |
-| **`timestamp`** | <code>number</code>   |
-| **`values`**    | <code>number[]</code> |
+Represents the result of a sensor reading.
+
+| Prop            | Type                | Description                                        |
+| --------------- | ------------------- | -------------------------------------------------- |
+| **`accuracy`**  | <code>number</code> | The accuracy of the sensor reading, if available.  |
+| **`timestamp`** | <code>number</code> | The timestamp of the sensor reading, if available. |
+| **`values`**    | <code>{}</code>     | The values obtained from the sensor reading.       |
+
+
+#### PluginListenerHandle
+
+| Prop         | Type                      |
+| ------------ | ------------------------- |
+| **`remove`** | <code>() =&gt; any</code> |
 
 
 ### Type Aliases
 
 
-#### PermissionState
-
-<code>'prompt' | 'prompt-with-rationale' | 'granted' | 'denied'</code>
-
-
-#### SensorEvent
-
-<code>keyof typeof <a href="#sensortype">SensorType</a></code>
-
-
-### Enums
-
-
 #### SensorType
 
-| Members                           |
-| --------------------------------- |
-| **`AMBIENT_LIGHT`**               |
-| **`ACCELEROMETER`**               |
-| **`TEMPERATURE`**                 |
-| **`GAME_ROTATION_VECTOR`**        |
-| **`GEOMAGNETIC_ROTATION_VECTOR`** |
-| **`GRAVITY`**                     |
-| **`GYROSCOPE`**                   |
-| **`HEART_BEAT`**                  |
-| **`HEART_RATE`**                  |
-| **`LINEAR_ACCELERATION`**         |
-| **`MAGNETOMETER`**                |
-| **`MOTION_DETECTOR`**             |
-| **`POSE_6DOF`**                   |
-| **`PRESSURE`**                    |
-| **`PROXIMITY`**                   |
-| **`RELATIVE_HUMIDITY`**           |
-| **`ROTATION_VECTOR`**             |
-| **`SIGNIFICANT_MOTION`**          |
-| **`STATIONARY_DETECTOR`**         |
-| **`STEP_COUNTER`**                |
-| **`STEP_DETECTOR`**               |
-| **`ABSOLUTE_ORIENTATION`**        |
-| **`RELATIVE_ORIENTATION`**        |
+<code>(typeof SensorTypes)[number]</code>
 
 
 #### SensorDelay
 
-| Members       |
-| ------------- |
-| **`FASTEST`** |
-| **`GAME`**    |
-| **`UI`**      |
-| **`NORMAL`**  |
+<code>(typeof SensorDelays)[number]</code>
+
+
+#### PermissionState
+
+<code>'prompt' | 'prompt-with-rationale' | 'granted' | 'denied'</code>
 
 </docgen-api>

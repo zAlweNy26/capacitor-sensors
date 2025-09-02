@@ -9,58 +9,15 @@ export interface PermissionStatus {
     magnetometer: PermissionState;
 }
 /**
- * Enum representing the delay rates for sensor data.
+ * Array of possible sensor delays.
  */
-export declare enum SensorDelay {
-    /**
-     * Get sensor data as fast as possible.
-     */
-    FASTEST = 0,
-    /**
-     * Rate suitable for games.
-     */
-    GAME = 1,
-    /**
-     * Rate suitable for user interface.
-     */
-    UI = 2,
-    /**
-     * Default rate, suitable for screen orientation changes.
-     */
-    NORMAL = 3
-}
+export declare const SensorDelays: readonly ["FASTEST", "GAME", "UI", "NORMAL"];
+export type SensorDelay = (typeof SensorDelays)[number];
 /**
- * Enum representing the types of sensors available in the application.
+ * Array representing the types of sensors available in the application.
  */
-export declare enum SensorType {
-    AMBIENT_LIGHT = 0,
-    ACCELEROMETER = 1,
-    TEMPERATURE = 2,
-    GAME_ROTATION_VECTOR = 3,
-    GEOMAGNETIC_ROTATION_VECTOR = 4,
-    GRAVITY = 5,
-    GYROSCOPE = 6,
-    HEART_BEAT = 7,
-    HEART_RATE = 8,
-    LINEAR_ACCELERATION = 9,
-    MAGNETOMETER = 10,
-    MOTION_DETECTOR = 11,
-    POSE_6DOF = 12,
-    PRESSURE = 13,
-    PROXIMITY = 14,
-    RELATIVE_HUMIDITY = 15,
-    ROTATION_VECTOR = 16,
-    SIGNIFICANT_MOTION = 17,
-    STATIONARY_DETECTOR = 18,
-    STEP_COUNTER = 19,
-    STEP_DETECTOR = 20,
-    ABSOLUTE_ORIENTATION = 21,
-    RELATIVE_ORIENTATION = 22
-}
-/**
- * Represents the event names for sensor data.
- */
-export type SensorEvent = keyof typeof SensorType;
+export declare const SensorTypes: readonly ["AMBIENT_LIGHT", "ACCELEROMETER", "TEMPERATURE", "GAME_ROTATION_VECTOR", "GEOMAGNETIC_ROTATION_VECTOR", "GRAVITY", "GYROSCOPE", "HEART_BEAT", "HEART_RATE", "LINEAR_ACCELERATION", "MAGNETOMETER", "MOTION_DETECTOR", "POSE_6DOF", "PRESSURE", "PROXIMITY", "RELATIVE_HUMIDITY", "ROTATION_VECTOR", "SIGNIFICANT_MOTION", "STATIONARY_DETECTOR", "STEP_COUNTER", "STEP_DETECTOR", "ABSOLUTE_ORIENTATION", "RELATIVE_ORIENTATION"];
+export type SensorType = (typeof SensorTypes)[number];
 /**
  * Represents the options for a sensor.
  */
@@ -79,6 +36,10 @@ export interface SensorOptions {
  */
 export interface SensorInfos {
     /**
+     * The name of the sensor.
+     */
+    name: string;
+    /**
      * The vendor of the sensor.
      */
     vendor: string;
@@ -91,23 +52,23 @@ export interface SensorInfos {
      */
     type: number;
     /**
-     * The maximum range of the sensor.
+     * The maximum range of the sensor in sensor units.
      */
     maxRange: number;
     /**
-     * The resolution of the sensor.
+     * The resolution of the sensor in sensor units.
      */
     resolution: number;
     /**
-     * The power consumption of the sensor.
+     * The power consumption of the sensor in milliamperes.
      */
     power: number;
     /**
-     * The minimum delay between sensor readings.
+     * The minimum delay between sensor readings in microseconds.
      */
     minDelay: number;
     /**
-     * The maximum delay between sensor readings.
+     * The maximum delay between sensor readings in microseconds.
      */
     maxDelay: number;
 }
@@ -167,20 +128,24 @@ export interface SensorsPlugin {
      * @param sensor The sensor to start.
      * @returns A Promise that resolves when the sensor has started.
      */
-    start(sensor: SensorOptions): Promise<void>;
+    start(options: {
+        type: SensorType;
+    }): Promise<void>;
     /**
      * Stops the given sensor.
      * @param sensor The sensor to stop.
      * @returns A Promise that resolves when the sensor has stopped.
      */
-    stop(sensor: SensorOptions): Promise<void>;
+    stop(options: {
+        type: SensorType;
+    }): Promise<void>;
     /**
      * Adds a listener for the given sensor event.
      * @param eventName The name of the event to listen for.
      * @param listenerFunc The function to call when the event is triggered.
      * @returns A Promise that resolves to a handle for the listener.
      */
-    addListener(eventName: SensorEvent, listenerFunc: (event: SensorResult) => void): Promise<PluginListenerHandle>;
+    addListener(eventName: SensorType, listenerFunc: (event: SensorResult) => void): Promise<PluginListenerHandle>;
     /**
      * Removes all listeners for the sensor plugin.
      * @returns A Promise that resolves when all listeners have been removed.

@@ -39,8 +39,13 @@ class SensorsPlugin : Plugin() {
 
     @PluginMethod
     fun init(call: PluginCall) {
-        val type = call.getInt("type")?.toEnum<SensorType>()!!
+        val type = this.getSensorType(call.getString("type"))
         val delay = call.getInt("delay", 3)?.toEnum<SensorDelay>()!!
+
+        if (type == null) {
+            call.reject("Invalid sensor type")
+            return
+        }
 
         if (!isPresent(type)) {
             call.resolve()
@@ -65,13 +70,35 @@ class SensorsPlugin : Plugin() {
         return notifyListeners(eventName, data, retainUntilConsumed)
     }
 
+    private fun getSensorType(typeStr: String?): SensorType? {
+        return typeStr?.let {
+            try {
+                SensorType.valueOf(it)
+            } catch (e: IllegalArgumentException) {
+                null
+            }
+        }
+    }
+
     private fun isPresent(sensor: SensorType): Boolean {
+        if (sensor == SensorType.RELATIVE_ORIENTATION) {
+            val accelerometerAvailable = sensorsManager?.getDefaultSensor(Sensor.TYPE_ACCELEROMETER) != null
+            val magnetometerAvailable = sensorsManager?.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD) != null
+            return accelerometerAvailable && magnetometerAvailable
+        }
+        if (sensor == SensorType.ABSOLUTE_ORIENTATION) {
+            val gravitySensorAvailable = sensorsManager?.getDefaultSensor(Sensor.TYPE_GRAVITY) != null
+            val magnetometerAvailable = sensorsManager?.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD) != null
+            return gravitySensorAvailable && magnetometerAvailable
+        }
         return sensorsManager?.getDefaultSensor(sensor.type) != null
     }
 
     @PluginMethod
     fun getAvailableSensors(call: PluginCall) {
-        val sensorsList = sensorsManager?.getSensorList(Sensor.TYPE_ALL)?.map { SensorType.fromInt(it.type)?.ordinal } ?: listOf()
+        val sensorsList = sensorsManager?.getSensorList(Sensor.TYPE_ALL)?.mapNotNull { SensorType.fromInt(it.type)?.name }?.distinct()?.toMutableList() ?: mutableListOf()
+        if (sensorsList.contains(SensorType.MAGNETOMETER.name) && sensorsList.contains(SensorType.ACCELEROMETER.name)) sensorsList.add(SensorType.RELATIVE_ORIENTATION.name)
+        if (sensorsList.contains(SensorType.MAGNETOMETER.name) && sensorsList.contains(SensorType.GRAVITY.name)) sensorsList.add(SensorType.ABSOLUTE_ORIENTATION.name)
         val list = JSArray(sensorsList)
         val ret = JSObject()
         ret.put("sensors", list)
@@ -80,14 +107,14 @@ class SensorsPlugin : Plugin() {
 
     @PluginMethod
     fun start(call: PluginCall) {
-        val sensor = call.data.getInt("type").toEnum<SensorType>()
+        val type = this.getSensorType(call.getString("type"))
         
-        if (sensor == null) {
+        if (type == null) {
             call.reject("Invalid sensor type")
             return
         }
         
-        val sensorInstance = this.sensors.find { it.type == sensor }
+        val sensorInstance = this.sensors.find { it.type == type }
         
         if (sensorInstance == null) {
             call.reject("Sensor not initialized. Call init() first.")
@@ -100,14 +127,14 @@ class SensorsPlugin : Plugin() {
 
     @PluginMethod
     fun stop(call: PluginCall) {
-        val sensor = call.data.getInt("type").toEnum<SensorType>()
+        val type = this.getSensorType(call.getString("type"))
         
-        if (sensor == null) {
+        if (type == null) {
             call.reject("Invalid sensor type")
             return
         }
         
-        val sensorInstance = this.sensors.find { it.type == sensor }
+        val sensorInstance = this.sensors.find { it.type == type }
         
         if (sensorInstance == null) {
             call.reject("Sensor not found or not initialized")

@@ -3,148 +3,150 @@
 var core = require('@capacitor/core');
 
 /**
- * Enum representing the delay rates for sensor data.
+ * Array of possible sensor delays.
  */
-exports.SensorDelay = void 0;
-(function (SensorDelay) {
-    /**
-     * Get sensor data as fast as possible.
-     */
-    SensorDelay[SensorDelay["FASTEST"] = 0] = "FASTEST";
-    /**
-     * Rate suitable for games.
-     */
-    SensorDelay[SensorDelay["GAME"] = 1] = "GAME";
-    /**
-     * Rate suitable for user interface.
-     */
-    SensorDelay[SensorDelay["UI"] = 2] = "UI";
-    /**
-     * Default rate, suitable for screen orientation changes.
-     */
-    SensorDelay[SensorDelay["NORMAL"] = 3] = "NORMAL";
-})(exports.SensorDelay || (exports.SensorDelay = {}));
+const SensorDelays = ['FASTEST', 'GAME', 'UI', 'NORMAL'];
 /**
- * Enum representing the types of sensors available in the application.
+ * Array representing the types of sensors available in the application.
  */
-exports.SensorType = void 0;
-(function (SensorType) {
-    SensorType[SensorType["AMBIENT_LIGHT"] = 0] = "AMBIENT_LIGHT";
-    SensorType[SensorType["ACCELEROMETER"] = 1] = "ACCELEROMETER";
-    SensorType[SensorType["TEMPERATURE"] = 2] = "TEMPERATURE";
-    SensorType[SensorType["GAME_ROTATION_VECTOR"] = 3] = "GAME_ROTATION_VECTOR";
-    SensorType[SensorType["GEOMAGNETIC_ROTATION_VECTOR"] = 4] = "GEOMAGNETIC_ROTATION_VECTOR";
-    SensorType[SensorType["GRAVITY"] = 5] = "GRAVITY";
-    SensorType[SensorType["GYROSCOPE"] = 6] = "GYROSCOPE";
-    SensorType[SensorType["HEART_BEAT"] = 7] = "HEART_BEAT";
-    SensorType[SensorType["HEART_RATE"] = 8] = "HEART_RATE";
-    SensorType[SensorType["LINEAR_ACCELERATION"] = 9] = "LINEAR_ACCELERATION";
-    SensorType[SensorType["MAGNETOMETER"] = 10] = "MAGNETOMETER";
-    SensorType[SensorType["MOTION_DETECTOR"] = 11] = "MOTION_DETECTOR";
-    SensorType[SensorType["POSE_6DOF"] = 12] = "POSE_6DOF";
-    SensorType[SensorType["PRESSURE"] = 13] = "PRESSURE";
-    SensorType[SensorType["PROXIMITY"] = 14] = "PROXIMITY";
-    SensorType[SensorType["RELATIVE_HUMIDITY"] = 15] = "RELATIVE_HUMIDITY";
-    SensorType[SensorType["ROTATION_VECTOR"] = 16] = "ROTATION_VECTOR";
-    SensorType[SensorType["SIGNIFICANT_MOTION"] = 17] = "SIGNIFICANT_MOTION";
-    SensorType[SensorType["STATIONARY_DETECTOR"] = 18] = "STATIONARY_DETECTOR";
-    SensorType[SensorType["STEP_COUNTER"] = 19] = "STEP_COUNTER";
-    SensorType[SensorType["STEP_DETECTOR"] = 20] = "STEP_DETECTOR";
-    SensorType[SensorType["ABSOLUTE_ORIENTATION"] = 21] = "ABSOLUTE_ORIENTATION";
-    SensorType[SensorType["RELATIVE_ORIENTATION"] = 22] = "RELATIVE_ORIENTATION";
-})(exports.SensorType || (exports.SensorType = {}));
+const SensorTypes = [
+    'AMBIENT_LIGHT',
+    'ACCELEROMETER',
+    'TEMPERATURE',
+    'GAME_ROTATION_VECTOR',
+    'GEOMAGNETIC_ROTATION_VECTOR',
+    'GRAVITY',
+    'GYROSCOPE',
+    'HEART_BEAT',
+    'HEART_RATE',
+    'LINEAR_ACCELERATION',
+    'MAGNETOMETER',
+    'MOTION_DETECTOR',
+    'POSE_6DOF',
+    'PRESSURE',
+    'PROXIMITY',
+    'RELATIVE_HUMIDITY',
+    'ROTATION_VECTOR',
+    'SIGNIFICANT_MOTION',
+    'STATIONARY_DETECTOR',
+    'STEP_COUNTER',
+    'STEP_DETECTOR',
+    'ABSOLUTE_ORIENTATION',
+    'RELATIVE_ORIENTATION',
+];
 
 const Sensors = core.registerPlugin('Sensors', {
     web: () => Promise.resolve().then(function () { return web; }).then((m) => new m.SensorsWeb()),
 });
 
 const webSupportedSensors = {
-    AbsoluteOrientationSensor: exports.SensorType.ABSOLUTE_ORIENTATION,
-    Accelerometer: exports.SensorType.ACCELEROMETER,
-    AmbientLightSensor: exports.SensorType.AMBIENT_LIGHT,
-    GravitySensor: exports.SensorType.GRAVITY,
-    Gyroscope: exports.SensorType.GYROSCOPE,
-    LinearAccelerationSensor: exports.SensorType.LINEAR_ACCELERATION,
-    Magnetometer: exports.SensorType.MAGNETOMETER,
-    RelativeOrientationSensor: exports.SensorType.RELATIVE_ORIENTATION,
-    ondevicemotion: exports.SensorType.MOTION_DETECTOR,
+    AbsoluteOrientationSensor: 'ABSOLUTE_ORIENTATION',
+    Accelerometer: 'ACCELEROMETER',
+    AmbientLightSensor: 'AMBIENT_LIGHT',
+    GravitySensor: 'GRAVITY',
+    Gyroscope: 'GYROSCOPE',
+    LinearAccelerationSensor: 'LINEAR_ACCELERATION',
+    Magnetometer: 'MAGNETOMETER',
+    RelativeOrientationSensor: 'RELATIVE_ORIENTATION',
+    ondevicemotion: 'MOTION_DETECTOR',
 };
 const webSensorFrequency = {
-    [exports.SensorDelay.FASTEST]: 0,
-    [exports.SensorDelay.GAME]: 15,
-    [exports.SensorDelay.UI]: 30,
-    [exports.SensorDelay.NORMAL]: 60,
+    FASTEST: 0,
+    GAME: 15,
+    UI: 30,
+    NORMAL: 60,
 };
 const webNeededPerms = {
-    [exports.SensorType.ABSOLUTE_ORIENTATION]: ['accelerometer', 'gyroscope', 'magnetometer'],
-    [exports.SensorType.ACCELEROMETER]: ['accelerometer'],
-    [exports.SensorType.AMBIENT_LIGHT]: ['ambient-light-sensor'],
-    [exports.SensorType.GRAVITY]: ['accelerometer'],
-    [exports.SensorType.GYROSCOPE]: ['gyroscope'],
-    [exports.SensorType.LINEAR_ACCELERATION]: ['accelerometer'],
-    [exports.SensorType.MAGNETOMETER]: ['magnetometer'],
-    [exports.SensorType.RELATIVE_ORIENTATION]: ['accelerometer', 'gyroscope'],
+    ABSOLUTE_ORIENTATION: ['accelerometer', 'gyroscope', 'magnetometer'],
+    ACCELEROMETER: ['accelerometer'],
+    AMBIENT_LIGHT: ['ambient-light-sensor'],
+    GRAVITY: ['accelerometer'],
+    GYROSCOPE: ['gyroscope'],
+    LINEAR_ACCELERATION: ['accelerometer'],
+    MAGNETOMETER: ['magnetometer'],
+    RELATIVE_ORIENTATION: ['accelerometer', 'gyroscope'],
+    TEMPERATURE: [],
+    GAME_ROTATION_VECTOR: [],
+    GEOMAGNETIC_ROTATION_VECTOR: [],
+    HEART_BEAT: [],
+    HEART_RATE: [],
+    MOTION_DETECTOR: [],
+    POSE_6DOF: [],
+    PRESSURE: [],
+    PROXIMITY: [],
+    RELATIVE_HUMIDITY: [],
+    ROTATION_VECTOR: [],
+    SIGNIFICANT_MOTION: [],
+    STATIONARY_DETECTOR: [],
+    STEP_COUNTER: [],
+    STEP_DETECTOR: [],
 };
-const getWindowProperty = (type) => Object.keys(webSupportedSensors).find((key) => webSupportedSensors[key] === type);
+const getWindowProperty = (type) => { var _a; return (_a = Object.entries(webSupportedSensors).find(([, value]) => value === type)) === null || _a === void 0 ? void 0 : _a[0]; };
 class WebSensor {
-    constructor(notify, type, delay = exports.SensorDelay.NORMAL) {
-        var _a;
+    constructor(notify, type, delay = 'NORMAL') {
         this.notify = notify;
         this.type = type;
         this.delay = delay;
         this.abortController = new AbortController();
-        const windowKey = (_a = getWindowProperty(type)) !== null && _a !== void 0 ? _a : '';
+        const windowKey = getWindowProperty(type);
+        if (!windowKey || windowKey === 'ondevicemotion')
+            return;
         this.sensor = new window[windowKey]({ frequency: webSensorFrequency[delay] });
     }
     start() {
         this.abortController = new AbortController();
-        if (this.type == exports.SensorType.MOTION_DETECTOR) {
+        if (this.type == 'MOTION_DETECTOR' || !this.sensor) {
             window.addEventListener('devicemotion', (ev) => {
                 var _a, _b, _c;
                 const x = ((_a = ev.accelerationIncludingGravity) === null || _a === void 0 ? void 0 : _a.x) || 0;
                 const y = ((_b = ev.accelerationIncludingGravity) === null || _b === void 0 ? void 0 : _b.y) || 0;
                 const z = ((_c = ev.accelerationIncludingGravity) === null || _c === void 0 ? void 0 : _c.z) || 0;
                 const result = {
-                    accuracy: -1,
+                    accuracy: 0,
                     timestamp: ev.timeStamp,
                     values: [x, y, z],
                 };
-                this.notify(exports.SensorType[this.type], result);
+                this.notify(this.type, result);
             }, { signal: this.abortController.signal });
         }
         else {
+            const sensor = this.sensor;
             this.sensor.addEventListener('reading', () => {
                 const values = [];
-                if ('illuminance' in this.sensor)
-                    values.push(this.sensor.illuminance);
-                if ('quaternion' in this.sensor)
-                    values.push(...this.sensor.quaternion);
-                if ('x' in this.sensor)
-                    values.push(this.sensor.x);
-                if ('y' in this.sensor)
-                    values.push(this.sensor.y);
-                if ('z' in this.sensor)
-                    values.push(this.sensor.z);
+                if ('illuminance' in sensor)
+                    values.push(sensor.illuminance);
+                if ('quaternion' in sensor)
+                    values.push(...sensor.quaternion);
+                if ('x' in sensor)
+                    values.push(sensor.x);
+                if ('y' in sensor)
+                    values.push(sensor.y);
+                if ('z' in sensor)
+                    values.push(sensor.z);
                 const result = {
-                    accuracy: -1,
-                    timestamp: this.sensor.timestamp || -1,
+                    accuracy: 0,
+                    timestamp: sensor.timestamp || 0,
                     values,
                 };
-                this.notify(exports.SensorType[this.type], result);
+                this.notify(this.type, result);
             });
+            this.sensor.start();
         }
-        this.sensor.start();
     }
     stop() {
-        this.sensor.removeEventListener('reading', null);
+        var _a, _b;
+        (_a = this.sensor) === null || _a === void 0 ? void 0 : _a.removeEventListener('reading', null);
         this.abortController.abort('stop');
-        this.sensor.stop();
+        (_b = this.sensor) === null || _b === void 0 ? void 0 : _b.stop();
     }
 }
 class SensorsWeb extends core.WebPlugin {
     constructor() {
         super(...arguments);
         this.sensors = [];
+        this.onSensorData = (eventName, data) => {
+            this.notifyListeners(eventName, data, true);
+        };
     }
     async checkPermissions() {
         if (typeof navigator === 'undefined' || !navigator.permissions) {
@@ -157,11 +159,11 @@ class SensorsWeb extends core.WebPlugin {
             return Object.assign(Object.assign({}, p), { [c.name]: c.state });
         }, {});
     }
-    async requestPermissions(sensor) {
+    async requestPermissions(options) {
         if (typeof navigator === 'undefined' || !navigator.permissions) {
             throw this.unavailable('Permissions API not available in this browser.');
         }
-        const permission = await Promise.all(webNeededPerms[sensor.type].map((p) => navigator.permissions.query({ name: p })));
+        const permission = await Promise.all(webNeededPerms[options.type].map((p) => navigator.permissions.query({ name: p })));
         return permission.reduce((p, c) => {
             return Object.assign(Object.assign({}, p), { [c.name]: c.state });
         }, {});
@@ -180,11 +182,11 @@ class SensorsWeb extends core.WebPlugin {
     }
     async init({ type, delay }) {
         if (this.isPresent(type)) {
-            const sensor = new WebSensor(this.notifyListeners, type, delay);
+            const sensor = new WebSensor(this.onSensorData, type, delay);
             this.sensors.push(sensor);
             return { type, delay };
         }
-        return;
+        return { type, delay };
     }
     async getAvailableSensors() {
         const sensorsList = Object.entries(webSupportedSensors)
@@ -195,7 +197,7 @@ class SensorsWeb extends core.WebPlugin {
         };
     }
     isPresent(type) {
-        if (type in exports.SensorType) {
+        if (SensorTypes.includes(type)) {
             const windowKey = getWindowProperty(type);
             if (windowKey)
                 return windowKey in window;
@@ -210,5 +212,7 @@ var web = /*#__PURE__*/Object.freeze({
     SensorsWeb: SensorsWeb
 });
 
+exports.SensorDelays = SensorDelays;
+exports.SensorTypes = SensorTypes;
 exports.Sensors = Sensors;
 //# sourceMappingURL=plugin.cjs.js.map
