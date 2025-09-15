@@ -1,5 +1,11 @@
 # @danyalwe/capacitor-sensors
 
+## 1.0.1
+
+### Patch Changes
+
+- ffc0aa2: Update module resolution
+
 ## 1.0.0
 
 ### Major Changes
